@@ -48,6 +48,9 @@ public class Game extends JPanel {
      */
     private double eliteSpawnChance = 0.3;
 
+    private final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
+    private final EnemyAircraftFactory eliteEnemyFactory = new EliteEnemyFactory();
+
 
     /**
      * 当前得分
@@ -112,21 +115,9 @@ public class Game extends JPanel {
                 if (enemyAircrafts.size() < enemyMaxNumber) {
                     boolean nextEnemyIsElite = Math.random() < eliteSpawnChance;
                     if (nextEnemyIsElite) {
-                        enemyAircrafts.add(new EliteEnemy(
-                                (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.ELITE_ENEMY_IMAGE.getWidth())),
-                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
-                                0,
-                                10,
-                                50
-                        ));
+                        enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
                     } else {
-                        enemyAircrafts.add(new MobEnemy(
-                                (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth())),
-                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
-                                0,
-                                10,
-                                30
-                        ));
+                        enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
                     }
                 }
                 // 飞机射出子弹

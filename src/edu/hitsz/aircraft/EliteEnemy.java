@@ -73,7 +73,7 @@ public class EliteEnemy extends EnemyAircraft {
             int roll = random.nextInt(TOTAL_WEIGHT);
 
             if (roll < HEALING_ITEM_WEIGHT) {
-                item =  new HealingItem(x, y, speedX, speedY);
+                item = new HealingItem(x, y, speedX, speedY);
                 res.add(item);
             } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT) {
                 item = new FirePowerUpItem(x, y, speedX, speedY);

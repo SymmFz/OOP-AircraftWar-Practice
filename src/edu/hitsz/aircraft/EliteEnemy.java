@@ -3,10 +3,7 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
-import edu.hitsz.item.BaseItem;
-import edu.hitsz.item.BombItem;
-import edu.hitsz.item.FirePowerUpItem;
-import edu.hitsz.item.HealingItem;
+import edu.hitsz.item.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -62,26 +59,21 @@ public class EliteEnemy extends EnemyAircraft {
     @Override
     public List<BaseItem> dropItems() {
         List<BaseItem> res = new LinkedList<>();
-        int x = this.getLocationX();
-        int y = this.getLocationY();
-        int speedX = 0;
-        int speedY = 3;
-        BaseItem item;
+        ItemFactory itemFactory;
 
         boolean dropItemFlag = Math.random() < ITEM_DROP_CHANCE;
         if (dropItemFlag) {
             int roll = random.nextInt(TOTAL_WEIGHT);
 
             if (roll < HEALING_ITEM_WEIGHT) {
-                item = new HealingItem(x, y, speedX, speedY);
-                res.add(item);
+                itemFactory = new HealingItemFactory();
             } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT) {
-                item = new FirePowerUpItem(x, y, speedX, speedY);
-                res.add(item);
-            } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT) {
-                item = new BombItem(x, y, speedX, speedY);
-                res.add(item);
+                itemFactory = new FirePowerUpItemFactory();
+            } else {
+                itemFactory = new BombItemFactory();
             }
+
+            res.add(itemFactory.createItem(this.locationX, this.locationY));
         }
 
         return res;

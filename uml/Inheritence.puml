@@ -42,8 +42,8 @@ class HeroAircraft {
     - power:int
     - direction:int
     + HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
-    + {abstract} forward():void
-    + {abstract} shoot():List<BaseBullet>
+    + forward():void
+    + shoot():List<BaseBullet>
 }
 
 AbstractAircraft <|-- HeroAircraft
@@ -118,19 +118,19 @@ abstract class BaseItem {
 class HealingItem {
     + HealingItem(int locationX, int locationY,
                    int speedX, int speedY)
-    + {abstract} active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
 
 class FirePowerUpItem {
     + HealingItem(int locationX, int locationY,
                    int speedX, int speedY)
-    + {abstract} active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
 
 class BombItem {
     + BombItem(int locationX, int locationY,
                    int speedX, int speedY)
-    + {abstract} active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
 
 BaseItem <|-- HealingItem

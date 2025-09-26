@@ -1,0 +1,114 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface EnemyAircraftFactory
+{
+    + {abstract} createEnemyAircraft():EnemyAircraft
+}
+
+class MobEnemyFactory
+{
+    + createEnemyAircraft():EnemyAircraft
+}
+
+class EliteEnemyFactory
+{
+    + createEnemyAircraft():EnemyAircraft
+}
+
+class BossEnemyFactory
+{
+    + createEnemyAircraft():EnemyAircraft
+}
+
+EnemyAircraftFactory <|.. MobEnemyFactory
+EnemyAircraftFactory <|.. EliteEnemyFactory
+EnemyAircraftFactory <|.. BossEnemyFactory
+
+MobEnemyFactory ..> MobEnemy
+EliteEnemyFactory ..> EliteEnemy
+BossEnemyFactory ..> BossEnemy
+
+abstract class AbstractFlyingObject
+{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+}
+
+abstract class AbstractAircraft
+{
+	# maxHp:int
+    # hp:int
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+    + decreaseHp(int decrease):void
+    + increaseHp(int increase):void
+    + getHp():int
+    + {abstract} shoot():List<BaseBullet>
+ }
+
+AbstractFlyingObject <|-- AbstractAircraft
+
+abstract class EnemyAircraft {
+    + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+    + {abstract} dropItems():List<BaseItem>
+}
+
+AbstractAircraft <|-- EnemyAircraft
+
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<BaseBullet>
+    + dropItems():List<BaseItem>
+}
+
+class EliteEnemy {
+    - shootNum:int
+    - power:int
+    - direction:int
+    - {static} ITEM_DROP_CHANCE:double
+    - {static} HEALING_ITEM_WEIGHT:int
+    - {static} FIRE_POWER_UP_WEIGHT:int
+    - {static} BOMB_ITEM_WEIGHT:int
+    - {static} TOTAL_WEIGHT:int
+    - {static} random:Random
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<BaseBullet>
+    + dropItems():List<BaseItem>
+}
+
+class BossEnemy {
+    - shootNum:int
+    - power:int
+    - direction:int
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<BaseBullet>
+    + dropItems():List<BaseItem>
+}
+
+EnemyAircraft <|-- MobEnemy
+EnemyAircraft <|-- EliteEnemy
+EnemyAircraft <|-- BossEnemy
+
+@enduml

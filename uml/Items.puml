@@ -1,0 +1,87 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface ItemFactory
+{
+    + {abstract} createItem(int locationX, int locationY):BaseItem
+}
+
+class BombItemFactory
+{
+    + createItem(int locationX, int locationY):BaseItem
+}
+
+class HealingItemFactory
+{
+    + createItem(int locationX, int locationY):BaseItem
+}
+
+class FirePowerUpItemFactory
+{
+    + createItem(int locationX, int locationY):BaseItem
+}
+
+ItemFactory <|.. BombItemFactory
+ItemFactory <|.. HealingItemFactory
+ItemFactory <|.. FirePowerUpItemFactory
+
+
+abstract class AbstractFlyingObject
+{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+}
+
+abstract class BaseItem {
+    + BaseItem(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + {abstract} active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+}
+
+AbstractFlyingObject <|-- BaseItem
+
+class HealingItem {
+    - healingAmount:int
+    + HealingItem(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+}
+
+class FirePowerUpItem {
+    - firePowerUpAmount:int
+    + HealingItem(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+}
+
+class BombItem {
+    + BombItem(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+}
+
+BaseItem <|-- HealingItem
+BaseItem <|-- FirePowerUpItem
+BaseItem <|-- BombItem
+
+BombItemFactory ..> BombItem
+HealingItemFactory ..> HealingItem
+FirePowerUpItemFactory ..> FirePowerUpItem
+
+@enduml

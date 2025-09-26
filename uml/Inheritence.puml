@@ -66,11 +66,18 @@ class EliteEnemy {
     - shootNum:int
     - power:int
     - direction:int
+    - {static} ITEM_DROP_CHANCE:double
+    - {static} HEALING_ITEM_WEIGHT:int
+    - {static} FIRE_POWER_UP_WEIGHT:int
+    - {static} BOMB_ITEM_WEIGHT:int
+    - {static} TOTAL_WEIGHT:int
+    - {static} random:Random
     + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
     + forward():void
     + shoot():List<BaseBullet>
     + dropItems():List<BaseItem>
 }
+
 
 class BossEnemy {
     - shootNum:int
@@ -107,31 +114,29 @@ class EnemyBullet {
 BaseBullet <|-- HeroBullet
 BaseBullet <|-- EnemyBullet
 
-
 abstract class BaseItem {
-    + BaseItem(int locationX, int locationY,
-                   int speedX, int speedY)
+    + BaseItem(int locationX, int locationY, int speedX, int speedY)
     + forward():void
     + {abstract} active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
 
 class HealingItem {
-    + HealingItem(int locationX, int locationY,
-                   int speedX, int speedY)
+    - healingAmount:int
+    + HealingItem(int locationX, int locationY, int speedX, int speedY)
     + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
 
 class FirePowerUpItem {
-    + HealingItem(int locationX, int locationY,
-                   int speedX, int speedY)
+    - firePowerUpAmount:int
+    + HealingItem(int locationX, int locationY, int speedX, int speedY)
     + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
 
 class BombItem {
-    + BombItem(int locationX, int locationY,
-                   int speedX, int speedY)
+    + BombItem(int locationX, int locationY, int speedX, int speedY)
     + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
 }
+
 
 BaseItem <|-- HealingItem
 BaseItem <|-- FirePowerUpItem

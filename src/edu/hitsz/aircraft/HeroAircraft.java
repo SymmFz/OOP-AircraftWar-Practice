@@ -1,5 +1,7 @@
 package edu.hitsz.aircraft;
 
+import edu.hitsz.application.ImageManager;
+import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.HeroBullet;
 
@@ -13,7 +15,11 @@ import java.util.List;
 public class HeroAircraft extends AbstractAircraft {
 
     // DCL
-    private volatile static HeroAircraft heroAircraft;
+    private static final HeroAircraft heroAircraft = new HeroAircraft(
+            Main.WINDOW_WIDTH / 2,
+            Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
+            0, 0, 100
+    );
 
     /**攻击方式 */
 
@@ -43,14 +49,7 @@ public class HeroAircraft extends AbstractAircraft {
         super(locationX, locationY, speedX, speedY, hp);
     }
 
-    public static HeroAircraft getInstance(int locationX, int locationY, int speedX, int speedY, int hp) {
-        if (heroAircraft == null) {
-            synchronized (HeroAircraft.class) {
-                if (heroAircraft == null) {
-                    heroAircraft = new HeroAircraft(locationX, locationY, speedX, speedY, hp);
-                }
-            }
-        }
+    public static HeroAircraft getInstance() {
         return heroAircraft;
     }
 

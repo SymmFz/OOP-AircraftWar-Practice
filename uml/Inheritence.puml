@@ -1,6 +1,8 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+scale 4
+
 abstract class AbstractFlyingObject
 {
     # locationX:int

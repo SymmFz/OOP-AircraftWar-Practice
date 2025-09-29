@@ -1,6 +1,15 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+class Game
+{
+
+}
+
+Game ..> EnemyAircraft
+Game ..> EnemyAircraftFactory
+
+
 interface EnemyAircraftFactory
 {
     + {abstract} createEnemyAircraft():EnemyAircraft

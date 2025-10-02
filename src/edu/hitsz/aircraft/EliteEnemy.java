@@ -12,11 +12,11 @@ import java.util.Random;
 public class EliteEnemy extends EnemyAircraft {
 
     private int shootNum = 1;
-    private int power = 10;
+    private int power = 5;
     private int direction = 1;
 
     // 掉落各类道具的概率
-    private static final double ITEM_DROP_CHANCE = 0.3;
+    private static final double ITEM_DROP_CHANCE = 0.7;
 
     private static final int HEALING_ITEM_WEIGHT = 40;
     private static final int FIRE_POWER_UP_WEIGHT = 30;

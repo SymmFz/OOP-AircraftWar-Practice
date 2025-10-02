@@ -12,7 +12,7 @@ import java.util.Random;
 public class ElitePlusEnemy extends EnemyAircraft {
 
     private int shootNum = 3;
-    private int power = 20;
+    private int power = 5;
     private int direction = 1;
 
     // 子弹间隔角度，单位：度

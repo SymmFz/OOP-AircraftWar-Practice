@@ -12,7 +12,7 @@ import java.util.Random;
 public class BossEnemy extends EnemyAircraft {
 
     private int shootNum = 20;
-    private int power = 20;
+    private int power = 5;
     private int direction = 0;
 
     // 掉落各类道具的概率
@@ -51,8 +51,8 @@ public class BossEnemy extends EnemyAircraft {
         BaseBullet bullet;
         for (int i = 0; i < shootNum; i++) {
             bulletCurrentAngel = i * bulletSepAngel;
-            x = (int) (Math.sin(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
-            y = (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
+            x = this.locationX + (int) (Math.sin(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
+            y = this.locationY + (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
             speedX = (int) (Math.sin(Math.toRadians(bulletCurrentAngel)) * baseSpeed);
             speedY = (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * baseSpeed);
             bullet = new EnemyBullet(x, y, speedX, speedY, power);
@@ -79,7 +79,7 @@ public class BossEnemy extends EnemyAircraft {
                     itemFactory = new BombItemFactory();
                 }
 
-                res.add(itemFactory.createItem(this.locationX + (i - 1) * 15, this.locationY));
+                res.add(itemFactory.createItem(this.locationX + (i - 1) * 25, this.locationY));
             }
         }
         return res;

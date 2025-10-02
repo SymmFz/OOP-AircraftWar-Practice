@@ -9,14 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class EliteEnemy extends EnemyAircraft {
+public class ElitePlusEnemy extends EnemyAircraft {
 
-    private int shootNum = 1;
-    private int power = 10;
+    private int shootNum = 3;
+    private int power = 20;
     private int direction = 1;
 
+    // 子弹间隔角度，单位：度
+    private static final int BULLET_SEP_ANGEL = 12;
+
     // 掉落各类道具的概率
-    private static final double ITEM_DROP_CHANCE = 0.3;
+    private static final double ITEM_DROP_CHANCE = 0.6;
 
     private static final int HEALING_ITEM_WEIGHT = 40;
     private static final int FIRE_POWER_UP_WEIGHT = 30;
@@ -26,7 +29,7 @@ public class EliteEnemy extends EnemyAircraft {
 
     private static final Random random = new Random();
 
-    public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
+    public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
     }
 
@@ -44,12 +47,14 @@ public class EliteEnemy extends EnemyAircraft {
         List<BaseBullet> res = new LinkedList<>();
         int x = this.getLocationX();
         int y = this.getLocationY() + direction * 2;
-        int speedX = 0;
+        int speedX;
         int speedY = this.getSpeedY() + direction * 5;
         BaseBullet bullet;
         for (int i = 0; i < shootNum; i++) {
             // 子弹发射位置相对飞机位置向前偏移
             // 多个子弹横向分散
+            speedX = (int) (speedY * (i - (shootNum / 2)) *
+                    Math.tan(Math.toRadians((double) BULLET_SEP_ANGEL)));
             bullet = new EnemyBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
             res.add(bullet);
         }

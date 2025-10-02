@@ -46,11 +46,19 @@ public class Game extends JPanel {
     /**
      * 下一个刷新的非 Boss 敌人为精英敌人的概率
      */
-    private double eliteSpawnChance = 0.3;
+    private double eliteSpawnChance = 0.2;
+
+    /**
+     * 下一个 Boss 敌人出现所需的分数阈值
+     */
+    private final int BOSS_SCORE_INTERVAL = 100;
+    private int bossScoreThreshold = 100;
+    private boolean bossExists = false;
 
     private final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
     private final EnemyAircraftFactory eliteEnemyFactory = new EliteEnemyFactory();
     private final EnemyAircraftFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
+    private final EnemyAircraftFactory bossEnemyFactory = new BossEnemyFactory();
 
     /**
      * 当前得分
@@ -108,15 +116,21 @@ public class Game extends JPanel {
                 System.out.println(time);
                 // 新敌机产生
                 if (enemyAircrafts.size() < enemyMaxNumber) {
-                    boolean nextEnemyIsElite = Math.random() < eliteSpawnChance;
-                    if (nextEnemyIsElite) {
-                        if (Math.random() < 0.6) {
-                            enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
-                        } else {
-                            enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
-                        }
+                    if (score >= bossScoreThreshold && !bossExists) {
+                        enemyAircrafts.add(bossEnemyFactory.createEnemyAircraft());
+                        bossScoreThreshold += BOSS_SCORE_INTERVAL;
+                        bossExists = true;
                     } else {
-                        enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
+                        boolean nextEnemyIsElite = Math.random() < eliteSpawnChance;
+                        if (nextEnemyIsElite) {
+                            if (Math.random() < 0.6) {
+                                enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
+                            } else {
+                                enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
+                            }
+                        } else {
+                            enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
+                        }
                     }
                 }
                 // 飞机射出子弹
@@ -284,7 +298,19 @@ public class Game extends JPanel {
         items.removeIf(AbstractFlyingObject::notValid);
         enemyBullets.removeIf(AbstractFlyingObject::notValid);
         heroBullets.removeIf(AbstractFlyingObject::notValid);
-        enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
+        // enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
+
+        Iterator<EnemyAircraft> enemyIterator = enemyAircrafts.iterator();
+        while (enemyIterator.hasNext()) {
+            EnemyAircraft enemyAircraft = enemyIterator.next();
+
+            if (enemyAircraft.notValid()) {
+                if (enemyAircraft instanceof BossEnemy) {
+                    bossExists = false;
+                }
+                enemyIterator.remove();
+            }
+        }
     }
 
     // ***********************

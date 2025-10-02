@@ -14,12 +14,23 @@ import java.util.List;
  */
 public class HeroAircraft extends AbstractAircraft {
 
-    // DCL
-    private static final HeroAircraft heroAircraft = new HeroAircraft(
-            Main.WINDOW_WIDTH / 2,
-            Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
-            0, 0, 100
-    );
+    // 静态内部类，为了实现单例模式的测试，需要设置类为 package-private，内部的实例为 private
+    static class HeroAircraftHolder {
+        private static HeroAircraft heroAircraft = new HeroAircraft(
+                Main.WINDOW_WIDTH / 2,
+                Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
+                0, 0, 100
+        );
+
+        // reset 方法仅用于在单元测试中重置单例。
+        static void reset() {
+             heroAircraft = new HeroAircraft(
+                    Main.WINDOW_WIDTH / 2,
+                    Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
+                    0, 0, 100
+            );
+        }
+    }
 
     /**攻击方式 */
 
@@ -50,7 +61,7 @@ public class HeroAircraft extends AbstractAircraft {
     }
 
     public static HeroAircraft getInstance() {
-        return heroAircraft;
+        return HeroAircraftHolder.heroAircraft;
     }
 
     @Override

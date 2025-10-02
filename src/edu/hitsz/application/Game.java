@@ -46,13 +46,18 @@ public class Game extends JPanel {
     /**
      * 下一个刷新的非 Boss 敌人为精英敌人的概率
      */
-    private double eliteSpawnChance = 0.2;
+    private final double ELITE_SPAWN_CHANCE = 0.2;
+
+    private final int MOB_ENEMY_SCORE = 100;
+    private final int ELITE_ENEMY_SCORE = 300;
+    private final int ELITE_PLUS_ENEMY_SCORE = 500;
+    private final int BOSS_ENEMY_SCORE = 1500;
 
     /**
      * 下一个 Boss 敌人出现所需的分数阈值
      */
-    private final int BOSS_SCORE_INTERVAL = 100;
-    private int bossScoreThreshold = 100;
+    private final int BOSS_SCORE_INTERVAL = 5000;
+    private int bossScoreThreshold = BOSS_SCORE_INTERVAL;
     private boolean bossExists = false;
 
     private final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
@@ -121,7 +126,7 @@ public class Game extends JPanel {
                         bossScoreThreshold += BOSS_SCORE_INTERVAL;
                         bossExists = true;
                     } else {
-                        boolean nextEnemyIsElite = Math.random() < eliteSpawnChance;
+                        boolean nextEnemyIsElite = Math.random() < ELITE_SPAWN_CHANCE;
                         if (nextEnemyIsElite) {
                             if (Math.random() < 0.75) {
                                 enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
@@ -258,12 +263,16 @@ public class Game extends JPanel {
                         // 获得分数，产生道具补给
                         items.addAll(enemyAircraft.dropItems());
                         if (enemyAircraft instanceof EliteEnemy) {
-                            score += 30;
+                            score += ELITE_ENEMY_SCORE;
+                        } else if (enemyAircraft instanceof ElitePlusEnemy) {
+                            score += ELITE_PLUS_ENEMY_SCORE;
+                        } else if (enemyAircraft instanceof BossEnemy) {
+                            score += BOSS_ENEMY_SCORE;
+                            bossExists = false;
                         } else {
-                            score += 10;
+                            score += MOB_ENEMY_SCORE;
                         }
                     }
-                    break; // TODO: maybe
                 }
             }
         }
@@ -298,19 +307,7 @@ public class Game extends JPanel {
         items.removeIf(AbstractFlyingObject::notValid);
         enemyBullets.removeIf(AbstractFlyingObject::notValid);
         heroBullets.removeIf(AbstractFlyingObject::notValid);
-        // enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
-
-        Iterator<EnemyAircraft> enemyIterator = enemyAircrafts.iterator();
-        while (enemyIterator.hasNext()) {
-            EnemyAircraft enemyAircraft = enemyIterator.next();
-
-            if (enemyAircraft.notValid()) {
-                if (enemyAircraft instanceof BossEnemy) {
-                    bossExists = false;
-                }
-                enemyIterator.remove();
-            }
-        }
+        enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
     }
 
     // ***********************

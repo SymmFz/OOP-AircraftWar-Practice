@@ -20,7 +20,7 @@ public class HeroAircraft extends AbstractAircraft {
         private static HeroAircraft heroAircraft = new HeroAircraft(
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
-                0, 0, 100000);
+                0, 0, 100);
 
         // reset 方法仅用于在单元测试中重置单例。
         static void reset() {

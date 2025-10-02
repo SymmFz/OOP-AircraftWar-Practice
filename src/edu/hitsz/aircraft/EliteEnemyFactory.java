@@ -12,7 +12,7 @@ public class EliteEnemyFactory implements EnemyAircraftFactory {
                 (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.ELITE_ENEMY_IMAGE.getWidth())),
                 (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
                 0,
-                10,
+                5,
                 50);
     }
 }

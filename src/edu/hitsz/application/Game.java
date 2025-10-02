@@ -123,7 +123,7 @@ public class Game extends JPanel {
                     } else {
                         boolean nextEnemyIsElite = Math.random() < eliteSpawnChance;
                         if (nextEnemyIsElite) {
-                            if (Math.random() < 0.6) {
+                            if (Math.random() < 0.75) {
                                 enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
                             } else {
                                 enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());

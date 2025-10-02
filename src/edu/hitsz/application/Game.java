@@ -50,7 +50,7 @@ public class Game extends JPanel {
 
     private final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
     private final EnemyAircraftFactory eliteEnemyFactory = new EliteEnemyFactory();
-
+    private final EnemyAircraftFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
 
     /**
      * 当前得分
@@ -80,7 +80,6 @@ public class Game extends JPanel {
         enemyBullets = new LinkedList<>();
         items = new LinkedList<>();
 
-
         /**
          * Scheduled 线程池，用于定时任务调度
          * 关于alibaba code guide：可命名的 ThreadFactory 一般需要第三方包
@@ -89,7 +88,7 @@ public class Game extends JPanel {
         this.executorService = new ScheduledThreadPoolExecutor(1,
                 new BasicThreadFactory.Builder().namingPattern("game-action-%d").daemon(true).build());
 
-        //启动英雄机鼠标监听
+        // 启动英雄机鼠标监听
         new HeroController(this, heroAircraft);
 
     }
@@ -104,7 +103,6 @@ public class Game extends JPanel {
 
             time += timeInterval;
 
-
             // 周期性执行（控制频率）
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
@@ -112,7 +110,11 @@ public class Game extends JPanel {
                 if (enemyAircrafts.size() < enemyMaxNumber) {
                     boolean nextEnemyIsElite = Math.random() < eliteSpawnChance;
                     if (nextEnemyIsElite) {
-                        enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
+                        if (Math.random() < 0.6) {
+                            enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
+                        } else {
+                            enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
+                        }
                     } else {
                         enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
                     }
@@ -136,7 +138,7 @@ public class Game extends JPanel {
             // 后处理
             postProcessAction();
 
-            //每个时刻重绘界面
+            // 每个时刻重绘界面
             repaint();
 
             // 游戏结束检查英雄机是否存活
@@ -157,9 +159,9 @@ public class Game extends JPanel {
 
     }
 
-    //***********************
-    //      Action 各部分
-    //***********************
+    // ***********************
+    // Action 各部分
+    // ***********************
 
     private boolean timeCountAndNewCycleJudge() {
         cycleTime += timeInterval;
@@ -203,7 +205,6 @@ public class Game extends JPanel {
             enemyAircraft.forward();
         }
     }
-
 
     /**
      * 碰撞检测：
@@ -286,16 +287,15 @@ public class Game extends JPanel {
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
     }
 
-
-    //***********************
-    //      Paint 各部分
-    //***********************
+    // ***********************
+    // Paint 各部分
+    // ***********************
 
     /**
      * 重写paint方法
      * 通过重复调用paint方法，实现游戏动画
      *
-     * @param  g
+     * @param g
      */
     @Override
     public void paint(Graphics g) {
@@ -320,7 +320,7 @@ public class Game extends JPanel {
         g.drawImage(ImageManager.HERO_IMAGE, heroAircraft.getLocationX() - ImageManager.HERO_IMAGE.getWidth() / 2,
                 heroAircraft.getLocationY() - ImageManager.HERO_IMAGE.getHeight() / 2, null);
 
-        //绘制得分和生命值
+        // 绘制得分和生命值
         paintScoreAndLife(g);
 
     }
@@ -347,6 +347,5 @@ public class Game extends JPanel {
         y = y + 20;
         g.drawString("LIFE:" + this.heroAircraft.getHp(), x, y);
     }
-
 
 }

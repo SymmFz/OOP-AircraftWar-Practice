@@ -22,5 +22,6 @@ public class FirePowerUpItem extends BaseItem {
     public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets) {
         // TODO: implement active
         System.out.println("FireSupply active!");
+        heroAircraft.firePowerUp();
     }
 }

@@ -16,7 +16,7 @@ public class EliteEnemy extends EnemyAircraft {
     private int direction = 1;
 
     // 掉落各类道具的概率
-    private static final double ITEM_DROP_CHANCE = 0.7;
+    private static final double ITEM_DROP_CHANCE = 0.5;
 
     private static final int HEALING_ITEM_WEIGHT = 40;
     private static final int FIRE_POWER_UP_WEIGHT = 30;
@@ -45,7 +45,7 @@ public class EliteEnemy extends EnemyAircraft {
         int x = this.getLocationX();
         int y = this.getLocationY() + direction * 2;
         int speedX = 0;
-        int speedY = this.getSpeedY() + direction * 5;
+        int speedY = this.getSpeedY() + direction * 3;
         BaseBullet bullet;
         for (int i = 0; i < shootNum; i++) {
             // 子弹发射位置相对飞机位置向前偏移

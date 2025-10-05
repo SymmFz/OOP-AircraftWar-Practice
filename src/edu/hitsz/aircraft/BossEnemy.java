@@ -16,7 +16,7 @@ public class BossEnemy extends EnemyAircraft {
     private int direction = 0;
 
     // 掉落各类道具的概率
-    private static final double ITEM_DROP_CHANCE = 0.6;
+    private static final double ITEM_DROP_CHANCE = 0.7;
 
     private static final int HEALING_ITEM_WEIGHT = 40;
     private static final int FIRE_POWER_UP_WEIGHT = 30;
@@ -43,10 +43,10 @@ public class BossEnemy extends EnemyAircraft {
     public List<BaseBullet> shoot() {
         List<BaseBullet> res = new LinkedList<>();
         int locationVectorLen = 10;
-        int x, y;
+        int baseSpeed = 10;
         int bulletSepAngel = 360 / this.shootNum;
         int bulletCurrentAngel;
-        int baseSpeed = 10;
+        int x, y;
         int speedX, speedY;
         BaseBullet bullet;
         for (int i = 0; i < shootNum; i++) {

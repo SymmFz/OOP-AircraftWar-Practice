@@ -90,4 +90,16 @@ public class HeroAircraft extends AbstractAircraft {
         return res;
     }
 
+    public void firePowerUp() {
+        if (this.shootNum <= 6) {
+            this.shootNum += 1;
+            if (this.shootNum <= 2) {
+                this.power -= 30 / this.shootNum;
+                this.power += 5;
+            }
+        } else {
+            this.power += 5;
+        }
+    }
+
 }

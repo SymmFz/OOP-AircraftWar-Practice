@@ -16,10 +16,10 @@ public class ElitePlusEnemy extends EnemyAircraft {
     private int direction = 1;
 
     // 子弹间隔角度，单位：度
-    private static final int BULLET_SEP_ANGEL = 12;
+    private static final int BULLET_SEP_ANGEL = 20;
 
     // 掉落各类道具的概率
-    private static final double ITEM_DROP_CHANCE = 0.6;
+    private static final double ITEM_DROP_CHANCE = 0.7;
 
     private static final int HEALING_ITEM_WEIGHT = 40;
     private static final int FIRE_POWER_UP_WEIGHT = 30;
@@ -48,13 +48,13 @@ public class ElitePlusEnemy extends EnemyAircraft {
         int x = this.getLocationX();
         int y = this.getLocationY() + direction * 2;
         int speedX;
-        int speedY = this.getSpeedY() + direction * 5;
+        int speedY = this.getSpeedY() + direction * 3;
         BaseBullet bullet;
         for (int i = 0; i < shootNum; i++) {
             // 子弹发射位置相对飞机位置向前偏移
             // 多个子弹横向分散
-            speedX = (int) (speedY * (i - (shootNum / 2)) *
-                    Math.tan(Math.toRadians((double) BULLET_SEP_ANGEL)));
+            double bulletAngle = (i - (shootNum) / 2) * (double) BULLET_SEP_ANGEL;
+            speedX = (int) (speedY * Math.tan(Math.toRadians(bulletAngle)));
             bullet = new EnemyBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
             res.add(bullet);
         }

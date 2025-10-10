@@ -16,7 +16,7 @@ public class ElitePlusEnemy extends EnemyAircraft {
     private int direction = 1;
 
     // 子弹间隔角度，单位：度
-    private static final int BULLET_SEP_ANGEL = 20;
+    private static final int BULLET_SEP_ANGEL = 23;
 
     // 掉落各类道具的概率
     private static final double ITEM_DROP_CHANCE = 0.7;

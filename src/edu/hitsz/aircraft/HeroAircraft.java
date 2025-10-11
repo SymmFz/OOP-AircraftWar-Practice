@@ -23,18 +23,18 @@ public class HeroAircraft extends AbstractAircraft {
         private static HeroAircraft heroAircraft = new HeroAircraft(
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
-                0, 0, 100);
+                0, 0, 100,
+                new ShootContext(new HeroAircraftDirectShootStrategy()));
 
         // reset 方法仅用于在单元测试中重置单例。
         static void reset() {
             heroAircraft = new HeroAircraft(
                     Main.WINDOW_WIDTH / 2,
                     Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
-                    0, 0, 100);
+                    0, 0, 100,
+                    new ShootContext(new HeroAircraftDirectShootStrategy()));
         }
     }
-
-    private ShootContext shootContext = new ShootContext(new HeroAircraftDirectShootStrategy());
 
     /** 攻击方式 */
 
@@ -60,8 +60,8 @@ public class HeroAircraft extends AbstractAircraft {
      * @param speedY    英雄机射出的子弹的基准速度（英雄机无特定速度）
      * @param hp        初始生命值
      */
-    private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
-        super(locationX, locationY, speedX, speedY, hp);
+    private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp, shootContext);
     }
 
     public static HeroAircraft getInstance() {

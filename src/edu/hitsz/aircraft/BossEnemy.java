@@ -2,9 +2,7 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
-import edu.hitsz.bullet.EnemyBullet;
 import edu.hitsz.item.*;
-import edu.hitsz.shootstrategy.EnemyAircraftCircularShootStrategy;
 import edu.hitsz.shootstrategy.ShootContext;
 
 import java.util.LinkedList;
@@ -12,8 +10,6 @@ import java.util.List;
 import java.util.Random;
 
 public class BossEnemy extends EnemyAircraft {
-
-    private ShootContext shootContext = new ShootContext(new EnemyAircraftCircularShootStrategy());
 
     private int shootNum = 20;
     private int power = 5;
@@ -30,8 +26,8 @@ public class BossEnemy extends EnemyAircraft {
 
     private static final Random random = new Random();
 
-    public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
-        super(locationX, locationY, speedX, speedY, hp);
+    public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp, shootContext);
     }
 
     @Override

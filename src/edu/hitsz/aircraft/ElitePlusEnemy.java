@@ -3,7 +3,6 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.item.*;
-import edu.hitsz.shootstrategy.EnemyAircraftScatterShootStrategy;
 import edu.hitsz.shootstrategy.ShootContext;
 
 import java.util.LinkedList;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.Random;
 
 public class ElitePlusEnemy extends EnemyAircraft {
-
-    private ShootContext shootContext = new ShootContext(new EnemyAircraftScatterShootStrategy());
 
     private int shootNum = 3;
     private int power = 5;
@@ -32,8 +29,8 @@ public class ElitePlusEnemy extends EnemyAircraft {
 
     private static final Random random = new Random();
 
-    public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
-        super(locationX, locationY, speedX, speedY, hp);
+    public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp, shootContext);
     }
 
     @Override

@@ -4,6 +4,8 @@ import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
+import edu.hitsz.scorerecord.ScoreRecord;
+import edu.hitsz.scorerecord.ScoreRecordDaoImpl;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import javax.swing.*;
@@ -37,6 +39,8 @@ public class Game extends JPanel {
     private final List<BaseBullet> heroBullets;
     private final List<BaseBullet> enemyBullets;
     private final List<BaseItem> items;
+
+    private final ScoreRecordDaoImpl scoreRecordDaoImpl = new ScoreRecordDaoImpl();
 
     /**
      * 屏幕中出现的敌机最大数量
@@ -165,9 +169,14 @@ public class Game extends JPanel {
                 // 游戏结束
                 executorService.shutdown();
                 gameOverFlag = true;
+                ScoreRecord scoreRecord = new ScoreRecord("testUser", this.score);
+                scoreRecordDaoImpl.addRecord(scoreRecord);
                 System.out.println("Game Over!");
+                System.out.println("===============================");
+                System.out.println("           得分排行榜          ");
+                System.out.println("===============================");
+                scoreRecordDaoImpl.printAllScoreRecord();
             }
-
         };
 
         /**

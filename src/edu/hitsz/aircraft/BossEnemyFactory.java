@@ -17,6 +17,7 @@ public class BossEnemyFactory implements EnemyAircraftFactory {
                 0,
                 300,
                 0, 20, 5,
-                new ShootContext(new EnemyAircraftCircularShootStrategy()));
+                new ShootContext(new EnemyAircraftCircularShootStrategy()),
+                0.7, 3);
     }
 }

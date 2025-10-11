@@ -17,6 +17,7 @@ public class EliteEnemyFactory implements EnemyAircraftFactory {
                 3,
                 50,
                 1, 1, 5,
-                new ShootContext(new EnemyAircraftDirectShootStrategy()));
+                new ShootContext(new EnemyAircraftDirectShootStrategy()),
+                0.3, 1);
     }
 }

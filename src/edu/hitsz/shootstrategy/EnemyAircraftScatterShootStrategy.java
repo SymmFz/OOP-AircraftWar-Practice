@@ -9,6 +9,12 @@ import java.util.List;
 
 public class EnemyAircraftScatterShootStrategy implements ShootStrategy{
 
+    @Override
+    public int getDefaultShootNum() {
+        return 3;
+    }
+
+    @Override
     public List<BaseBullet> shoot(AbstractAircraft aircraft, int direction,
                                   int shootNum, int power) {
         List<BaseBullet> res = new LinkedList<>();

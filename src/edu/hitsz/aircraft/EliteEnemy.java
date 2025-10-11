@@ -11,10 +11,6 @@ import java.util.Random;
 
 public class EliteEnemy extends EnemyAircraft {
 
-    private int shootNum = 1;
-    private int power = 5;
-    private int direction = 1;
-
     // 掉落各类道具的概率
     private static final double ITEM_DROP_CHANCE = 0.5;
 
@@ -26,8 +22,10 @@ public class EliteEnemy extends EnemyAircraft {
 
     private static final Random random = new Random();
 
-    public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
-        super(locationX, locationY, speedX, speedY, hp, shootContext);
+    public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp,
+                      int direction, int shootNum, int power, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp,
+              direction, shootNum, power, shootContext);
     }
 
     @Override
@@ -37,11 +35,6 @@ public class EliteEnemy extends EnemyAircraft {
         if (locationY >= Main.WINDOW_HEIGHT) {
             vanish();
         }
-    }
-
-    @Override
-    public List<BaseBullet> shoot() {
-        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
     }
 
     @Override

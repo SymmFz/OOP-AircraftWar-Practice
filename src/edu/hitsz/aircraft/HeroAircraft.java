@@ -24,6 +24,7 @@ public class HeroAircraft extends AbstractAircraft {
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
                 0, 0, 100,
+                -1, 1, 30,
                 new ShootContext(new HeroAircraftDirectShootStrategy()));
 
         // reset 方法仅用于在单元测试中重置单例。
@@ -32,26 +33,10 @@ public class HeroAircraft extends AbstractAircraft {
                     Main.WINDOW_WIDTH / 2,
                     Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
                     0, 0, 100,
+                    -1, 1, 30,
                     new ShootContext(new HeroAircraftDirectShootStrategy()));
         }
     }
-
-    /** 攻击方式 */
-
-    /**
-     * 子弹一次发射数量
-     */
-    private int shootNum = 1;
-
-    /**
-     * 子弹伤害
-     */
-    private int power = 30;
-
-    /**
-     * 子弹射击方向 (向上发射：-1，向下发射：1)
-     */
-    private int direction = -1;
 
     /**
      * @param locationX 英雄机位置x坐标
@@ -60,8 +45,10 @@ public class HeroAircraft extends AbstractAircraft {
      * @param speedY    英雄机射出的子弹的基准速度（英雄机无特定速度）
      * @param hp        初始生命值
      */
-    private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
-        super(locationX, locationY, speedX, speedY, hp, shootContext);
+    private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
+                         int direction, int shootNum, int power, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp,
+              direction, shootNum, power, shootContext);
     }
 
     public static HeroAircraft getInstance() {
@@ -72,27 +59,4 @@ public class HeroAircraft extends AbstractAircraft {
     public void forward() {
         // 英雄机由鼠标控制，不通过forward函数移动
     }
-
-    @Override
-    /**
-     * 通过射击产生子弹
-     * 
-     * @return 射击出的子弹List
-     */
-    public List<BaseBullet> shoot() {
-        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
-    }
-
-    public void firePowerUp() {
-        if (this.shootNum <= 6) {
-            this.shootNum += 1;
-            if (this.shootNum <= 2) {
-                this.power -= 30 / this.shootNum;
-                this.power += 5;
-            }
-        } else {
-            this.power += 5;
-        }
-    }
-
 }

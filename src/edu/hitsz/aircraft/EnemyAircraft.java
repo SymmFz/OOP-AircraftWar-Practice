@@ -53,7 +53,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
                     itemFactory = new BombItemFactory();
                 }
 
-                res.add(itemFactory.createItem(this.locationX + (i - 1) * 25, this.locationY));
+                res.add(itemFactory.createItem(this.locationX + (i * 2 - shootNum + 1) * 10, this.locationY));
             }
         }
         return res;

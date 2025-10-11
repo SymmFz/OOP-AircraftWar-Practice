@@ -4,12 +4,16 @@ import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
 import edu.hitsz.item.*;
+import edu.hitsz.shootstrategy.EnemyAircraftCircularShootStrategy;
+import edu.hitsz.shootstrategy.ShootContext;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 public class BossEnemy extends EnemyAircraft {
+
+    private ShootContext shootContext = new ShootContext(new EnemyAircraftCircularShootStrategy());
 
     private int shootNum = 20;
     private int power = 5;
@@ -41,24 +45,7 @@ public class BossEnemy extends EnemyAircraft {
 
     @Override
     public List<BaseBullet> shoot() {
-        List<BaseBullet> res = new LinkedList<>();
-        int locationVectorLen = 10;
-        int baseSpeed = 10;
-        int bulletSepAngel = 360 / this.shootNum;
-        int bulletCurrentAngel;
-        int x, y;
-        int speedX, speedY;
-        BaseBullet bullet;
-        for (int i = 0; i < shootNum; i++) {
-            bulletCurrentAngel = i * bulletSepAngel;
-            x = this.locationX + (int) (Math.sin(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
-            y = this.locationY + (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
-            speedX = (int) (Math.sin(Math.toRadians(bulletCurrentAngel)) * baseSpeed);
-            speedY = (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * baseSpeed);
-            bullet = new EnemyBullet(x, y, speedX, speedY, power);
-            res.add(bullet);
-        }
-        return res;
+        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
     }
 
     @Override

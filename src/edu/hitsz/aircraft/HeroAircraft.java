@@ -4,6 +4,9 @@ import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.HeroBullet;
+import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
+import edu.hitsz.shootstrategy.ShootContext;
+import edu.hitsz.shootstrategy.ShootStrategy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +33,8 @@ public class HeroAircraft extends AbstractAircraft {
                     0, 0, 100);
         }
     }
+
+    private ShootContext shootContext = new ShootContext(new HeroAircraftDirectShootStrategy());
 
     /** 攻击方式 */
 
@@ -75,19 +80,7 @@ public class HeroAircraft extends AbstractAircraft {
      * @return 射击出的子弹List
      */
     public List<BaseBullet> shoot() {
-        List<BaseBullet> res = new LinkedList<>();
-        int x = this.getLocationX();
-        int y = this.getLocationY() + direction * 2;
-        int speedX = 0;
-        int speedY = direction * 10;
-        BaseBullet bullet;
-        for (int i = 0; i < shootNum; i++) {
-            // 子弹发射位置相对飞机位置向前偏移
-            // 多个子弹横向分散
-            bullet = new HeroBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
-            res.add(bullet);
-        }
-        return res;
+        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
     }
 
     public void firePowerUp() {

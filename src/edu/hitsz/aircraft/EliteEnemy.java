@@ -4,12 +4,16 @@ import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
 import edu.hitsz.item.*;
+import edu.hitsz.shootstrategy.EnemyAircraftDirectShootStrategy;
+import edu.hitsz.shootstrategy.ShootContext;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 public class EliteEnemy extends EnemyAircraft {
+
+    private ShootContext shootContext = new ShootContext(new EnemyAircraftDirectShootStrategy());
 
     private int shootNum = 1;
     private int power = 5;
@@ -41,19 +45,7 @@ public class EliteEnemy extends EnemyAircraft {
 
     @Override
     public List<BaseBullet> shoot() {
-        List<BaseBullet> res = new LinkedList<>();
-        int x = this.getLocationX();
-        int y = this.getLocationY() + direction * 2;
-        int speedX = 0;
-        int speedY = this.getSpeedY() + direction * 3;
-        BaseBullet bullet;
-        for (int i = 0; i < shootNum; i++) {
-            // 子弹发射位置相对飞机位置向前偏移
-            // 多个子弹横向分散
-            bullet = new EnemyBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
-            res.add(bullet);
-        }
-        return res;
+        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
     }
 
     @Override

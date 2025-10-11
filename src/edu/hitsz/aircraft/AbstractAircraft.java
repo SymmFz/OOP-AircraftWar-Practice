@@ -15,7 +15,7 @@ import java.util.List;
  */
 public abstract class AbstractAircraft extends AbstractFlyingObject {
 
-    protected ShootContext shootContext;
+    protected final ShootContext shootContext;
 
     /**
      * 生命值
@@ -23,10 +23,18 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
     protected int maxHp;
     protected int hp;
 
-    public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
+    protected int direction;
+    protected int shootNum;
+    protected int power;
+
+    public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
+                            int direction, int shootNum, int power, ShootContext shootContext) {
         super(locationX, locationY, speedX, speedY);
         this.hp = hp;
         this.maxHp = hp;
+        this.direction = direction;
+        this.shootNum = shootNum;
+        this.power = power;
         this.shootContext = shootContext;
     }
 
@@ -51,15 +59,18 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
 
     public void changeShootStrategy(ShootStrategy shootStrategy) {
         this.shootContext.setStrategy(shootStrategy);
+        this.shootNum = shootStrategy.getDefaultShootNum();
     }
 
     /**
-     * 飞机射击方法，可射击对象必须实现
+     * 飞机射击方法
      * @return
      *  可射击对象需实现，返回子弹
      *  非可射击对象空实现，返回null
      */
-    public abstract List<BaseBullet> shoot();
+    public List<BaseBullet> shoot() {
+        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
+    }
 
 }
 

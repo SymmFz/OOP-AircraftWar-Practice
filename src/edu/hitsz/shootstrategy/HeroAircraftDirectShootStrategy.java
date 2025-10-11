@@ -10,6 +10,11 @@ import java.util.List;
 public class HeroAircraftDirectShootStrategy implements ShootStrategy{
 
     @Override
+    public int getDefaultShootNum() {
+        return 1;
+    }
+
+    @Override
     public List<BaseBullet> shoot(AbstractAircraft aircraft, int direction,
                                   int shootNum, int power) {
         List<BaseBullet> res = new LinkedList<>();

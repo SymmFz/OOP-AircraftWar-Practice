@@ -16,8 +16,10 @@ import java.util.List;
  */
 public class MobEnemy extends EnemyAircraft {
 
-    public MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
-        super(locationX, locationY, speedX, speedY, hp, shootContext);
+    public MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp,
+                    int direction, int shootNum, int power, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp,
+              direction, shootNum, power, shootContext);
     }
 
     @Override
@@ -27,12 +29,6 @@ public class MobEnemy extends EnemyAircraft {
         if (locationY >= Main.WINDOW_HEIGHT ) {
             vanish();
         }
-    }
-
-    @Override
-    public List<BaseBullet> shoot() {
-        // 不射击
-        return this.shootContext.shoot(this, 0, 0, 0);
     }
 
     @Override

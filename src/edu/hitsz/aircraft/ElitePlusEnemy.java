@@ -11,10 +11,6 @@ import java.util.Random;
 
 public class ElitePlusEnemy extends EnemyAircraft {
 
-    private int shootNum = 3;
-    private int power = 5;
-    private int direction = 1;
-
     // 子弹间隔角度，单位：度
     private static final int BULLET_SEP_ANGEL = 23;
 
@@ -29,8 +25,10 @@ public class ElitePlusEnemy extends EnemyAircraft {
 
     private static final Random random = new Random();
 
-    public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, ShootContext shootContext) {
-        super(locationX, locationY, speedX, speedY, hp, shootContext);
+    public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp,
+                          int direction, int shootNum, int power, ShootContext shootContext) {
+        super(locationX, locationY, speedX, speedY, hp,
+              direction, shootNum, power, shootContext);
     }
 
     @Override
@@ -40,11 +38,6 @@ public class ElitePlusEnemy extends EnemyAircraft {
         if (locationY >= Main.WINDOW_HEIGHT) {
             vanish();
         }
-    }
-
-    @Override
-    public List<BaseBullet> shoot() {
-        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
     }
 
     @Override

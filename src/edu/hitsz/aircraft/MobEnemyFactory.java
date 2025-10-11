@@ -16,6 +16,7 @@ public class MobEnemyFactory implements EnemyAircraftFactory {
                 0,
                 5,
                 30,
+                1, 0, 0,
                 new ShootContext(new EnemyAircraftNoShootStrategy())
         );
     }

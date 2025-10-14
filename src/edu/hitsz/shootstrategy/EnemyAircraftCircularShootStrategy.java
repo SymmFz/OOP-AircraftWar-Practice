@@ -15,15 +15,11 @@ public class EnemyAircraftCircularShootStrategy implements ShootStrategy {
     }
 
     @Override
-    public List<BaseBullet> shoot(AbstractAircraft aircraft, int direction,
-                                  int shootNum, int power) {
+    public List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
+                                  int direction, int shootNum, int power) {
         List<BaseBullet> res = new LinkedList<>();
         int locationVectorLen = 10;
         int baseSpeed = 10;
-        int aircraftLocationX = aircraft.getLocationX();
-        int aircraftLocationY = aircraft.getLocationY();
-        int aircraftSpeedX = aircraft.getSpeedX();
-        int aircraftSpeedY = aircraft.getSpeedY();
         int bulletSepAngel = 360 / shootNum;
         int bulletCurrentAngel;
         int x, y;

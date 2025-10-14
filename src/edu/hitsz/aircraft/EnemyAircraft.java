@@ -1,7 +1,7 @@
 package edu.hitsz.aircraft;
 
 import edu.hitsz.item.*;
-import edu.hitsz.shootstrategy.ShootContext;
+import edu.hitsz.shootstrategy.ShootStrategy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,10 +16,10 @@ public abstract class EnemyAircraft extends AbstractAircraft {
     protected int maxItemNum;
 
     public EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
-                         int direction, int shootNum, int power, ShootContext shootContext,
+                         int direction, int shootNum, int power, ShootStrategy shootStrategy,
                          double itemDropChance, int maxItemNum) {
         super(locationX, locationY, speedX, speedY, hp,
-              direction, shootNum, power, shootContext);
+              direction, shootNum, power, shootStrategy);
         this.itemDropChance = itemDropChance;
         this.maxItemNum = maxItemNum;
     }

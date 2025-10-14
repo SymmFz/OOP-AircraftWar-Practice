@@ -3,7 +3,6 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.shootstrategy.EnemyAircraftScatterShootStrategy;
-import edu.hitsz.shootstrategy.ShootContext;
 
 public class ElitePlusEnemyFactory implements EnemyAircraftFactory {
 
@@ -16,8 +15,7 @@ public class ElitePlusEnemyFactory implements EnemyAircraftFactory {
                 3,
                 3,
                 70,
-                1, 3, 5,
-                new ShootContext(new EnemyAircraftScatterShootStrategy()),
+                1, 3, 5, new EnemyAircraftScatterShootStrategy(),
                 0.7, 1);
     }
 }

@@ -3,7 +3,6 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.shootstrategy.EnemyAircraftNoShootStrategy;
-import edu.hitsz.shootstrategy.ShootContext;
 
 public class MobEnemyFactory implements EnemyAircraftFactory {
 
@@ -16,8 +15,7 @@ public class MobEnemyFactory implements EnemyAircraftFactory {
                 0,
                 5,
                 30,
-                1, 0, 0,
-                new ShootContext(new EnemyAircraftNoShootStrategy()),
+                1, 0, 0, new EnemyAircraftNoShootStrategy(),
                 0, 0
         );
     }

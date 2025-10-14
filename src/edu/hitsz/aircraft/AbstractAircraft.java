@@ -2,7 +2,6 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
-import edu.hitsz.shootstrategy.ShootContext;
 import edu.hitsz.shootstrategy.ShootStrategy;
 
 import java.util.List;
@@ -15,8 +14,6 @@ import java.util.List;
  */
 public abstract class AbstractAircraft extends AbstractFlyingObject {
 
-    protected final ShootContext shootContext;
-
     /**
      * 生命值
      */
@@ -27,15 +24,17 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
     protected int shootNum;
     protected int power;
 
+    protected ShootStrategy shootStrategy;
+
     public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
-                            int direction, int shootNum, int power, ShootContext shootContext) {
+                            int direction, int shootNum, int power, ShootStrategy shootStrategy) {
         super(locationX, locationY, speedX, speedY);
         this.hp = hp;
         this.maxHp = hp;
         this.direction = direction;
         this.shootNum = shootNum;
         this.power = power;
-        this.shootContext = shootContext;
+        this.shootStrategy = shootStrategy;
     }
 
     public void decreaseHp(int decrease){
@@ -57,9 +56,9 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         return hp;
     }
 
-    public void changeShootStrategy(ShootStrategy shootStrategy) {
-        this.shootContext.setStrategy(shootStrategy);
-        this.shootNum = shootStrategy.getDefaultShootNum();
+    public void setStrategy(ShootStrategy strategy) {
+        this.shootStrategy = strategy;
+        this.shootNum = strategy.getDefaultShootNum();
     }
 
     /**
@@ -69,7 +68,7 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
      *  非可射击对象空实现，返回null
      */
     public List<BaseBullet> shoot() {
-        return this.shootContext.shoot(this, this.direction, this.shootNum, this.power);
+        return this.shootStrategy.shoot(this, this.direction, this.shootNum, this.power);
     }
 
 }

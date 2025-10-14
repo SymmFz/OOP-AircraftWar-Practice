@@ -20,6 +20,6 @@ public class FirePowerUpPlusItem extends BaseItem {
     @Override
     public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets) {
         System.out.println("FireSupply active!");
-        heroAircraft.changeShootStrategy(new HeroAircraftCircularShootStrategy());
+        heroAircraft.setStrategy(new HeroAircraftCircularShootStrategy());
     }
 }

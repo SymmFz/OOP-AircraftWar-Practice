@@ -2,14 +2,8 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
-import edu.hitsz.bullet.BaseBullet;
-import edu.hitsz.bullet.HeroBullet;
 import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
-import edu.hitsz.shootstrategy.ShootContext;
 import edu.hitsz.shootstrategy.ShootStrategy;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * 英雄飞机，游戏玩家操控
@@ -24,8 +18,8 @@ public class HeroAircraft extends AbstractAircraft {
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
                 0, 0, 100,
-                -1, 1, 30,
-                new ShootContext(new HeroAircraftDirectShootStrategy()));
+                -1, 1, 30, new HeroAircraftDirectShootStrategy()
+                );
 
         // reset 方法仅用于在单元测试中重置单例。
         static void reset() {
@@ -33,8 +27,8 @@ public class HeroAircraft extends AbstractAircraft {
                     Main.WINDOW_WIDTH / 2,
                     Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
                     0, 0, 100,
-                    -1, 1, 30,
-                    new ShootContext(new HeroAircraftDirectShootStrategy()));
+                    -1, 1, 30, new HeroAircraftDirectShootStrategy()
+                    );
         }
     }
 
@@ -46,9 +40,9 @@ public class HeroAircraft extends AbstractAircraft {
      * @param hp        初始生命值
      */
     private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
-                         int direction, int shootNum, int power, ShootContext shootContext) {
+                         int direction, int shootNum, int power, ShootStrategy shootStrategy) {
         super(locationX, locationY, speedX, speedY, hp,
-              direction, shootNum, power, shootContext);
+              direction, shootNum, power, shootStrategy);
     }
 
     public static HeroAircraft getInstance() {

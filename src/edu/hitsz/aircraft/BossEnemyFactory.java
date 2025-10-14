@@ -3,7 +3,6 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.shootstrategy.EnemyAircraftCircularShootStrategy;
-import edu.hitsz.shootstrategy.ShootContext;
 
 public class BossEnemyFactory implements EnemyAircraftFactory {
 
@@ -16,8 +15,7 @@ public class BossEnemyFactory implements EnemyAircraftFactory {
                 3,
                 0,
                 300,
-                0, 20, 5,
-                new ShootContext(new EnemyAircraftCircularShootStrategy()),
+                0, 20, 5, new EnemyAircraftCircularShootStrategy(),
                 0.7, 3);
     }
 }

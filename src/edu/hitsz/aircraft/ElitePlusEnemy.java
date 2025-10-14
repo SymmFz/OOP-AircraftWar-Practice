@@ -1,15 +1,15 @@
 package edu.hitsz.aircraft;
 
 import edu.hitsz.application.Main;
-import edu.hitsz.shootstrategy.ShootContext;
+import edu.hitsz.shootstrategy.ShootStrategy;
 
 public class ElitePlusEnemy extends EnemyAircraft {
 
     public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp,
-                          int direction, int shootNum, int power, ShootContext shootContext,
+                          int direction, int shootNum, int power, ShootStrategy shootStrategy,
                           double itemDropChance, int maxItemNum) {
         super(locationX, locationY, speedX, speedY, hp,
-                direction, shootNum, power, shootContext,
+                direction, shootNum, power, shootStrategy,
                 itemDropChance, maxItemNum);
     }
 

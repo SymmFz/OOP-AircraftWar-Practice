@@ -14,7 +14,8 @@ public class EnemyAircraftNoShootStrategy implements ShootStrategy {
     }
 
     @Override
-    public List<BaseBullet> shoot(AbstractAircraft aircraft, int direction, int shootNum, int power) {
+    public List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
+                                  int direction, int shootNum, int power) {
         return new LinkedList<>();
     }
 }

@@ -15,14 +15,14 @@ public class EnemyAircraftDirectShootStrategy implements ShootStrategy{
     }
 
     @Override
-    public List<BaseBullet> shoot(AbstractAircraft aircraft, int direction,
-                                  int shootNum, int power) {
+    public List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
+                                  int direction, int shootNum, int power) {
         List<BaseBullet> res = new LinkedList<>();
         int baseSpeedY = 5;
-        int x = aircraft.getLocationX();
-        int y = aircraft.getLocationY() + direction * 2;
+        int x = aircraftLocationX;
+        int y = aircraftLocationY + direction * 2;
         int speedX = 0;
-        int speedY = aircraft.getSpeedY() + direction * baseSpeedY;
+        int speedY = aircraftSpeedY + direction * baseSpeedY;
         BaseBullet bullet;
         for (int i = 0; i < shootNum; i++) {
             // 子弹发射位置相对飞机位置向前偏移

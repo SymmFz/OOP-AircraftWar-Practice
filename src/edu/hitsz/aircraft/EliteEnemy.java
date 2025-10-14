@@ -1,16 +1,14 @@
 package edu.hitsz.aircraft;
 
 import edu.hitsz.application.Main;
-import edu.hitsz.shootstrategy.ShootStrategy;
+import edu.hitsz.shootstrategy.EnemyAircraftDirectShootStrategy;
 
 public class EliteEnemy extends EnemyAircraft {
 
-    public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp,
-                      int direction, int shootNum, int power, ShootStrategy shootStrategy,
-                      double itemDropChance, int maxItemNum) {
+    public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp,
-                direction, shootNum, power, shootStrategy,
-                itemDropChance, maxItemNum);
+                1, 1, 5, new EnemyAircraftDirectShootStrategy(),
+                0.3, 1);
     }
 
     @Override

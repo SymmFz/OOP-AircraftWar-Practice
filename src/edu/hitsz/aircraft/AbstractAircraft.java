@@ -68,7 +68,10 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
      *  非可射击对象空实现，返回null
      */
     public List<BaseBullet> shoot() {
-        return this.shootStrategy.shoot(this, this.direction, this.shootNum, this.power);
+        return this.shootStrategy.shoot(
+                this.getLocationX(), this.getLocationY(), this.getSpeedX(), this.getSpeedY(),
+                this.direction, this.shootNum, this.power
+        );
     }
 
 }

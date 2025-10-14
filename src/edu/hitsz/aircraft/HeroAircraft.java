@@ -3,7 +3,6 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
-import edu.hitsz.shootstrategy.ShootStrategy;
 
 /**
  * 英雄飞机，游戏玩家操控
@@ -17,8 +16,7 @@ public class HeroAircraft extends AbstractAircraft {
         private static HeroAircraft heroAircraft = new HeroAircraft(
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
-                0, 0, 100,
-                -1, 1, 30, new HeroAircraftDirectShootStrategy()
+                0, 0, 100
                 );
 
         // reset 方法仅用于在单元测试中重置单例。
@@ -26,8 +24,7 @@ public class HeroAircraft extends AbstractAircraft {
             heroAircraft = new HeroAircraft(
                     Main.WINDOW_WIDTH / 2,
                     Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight(),
-                    0, 0, 100,
-                    -1, 1, 30, new HeroAircraftDirectShootStrategy()
+                    0, 0, 100
                     );
         }
     }
@@ -39,10 +36,9 @@ public class HeroAircraft extends AbstractAircraft {
      * @param speedY    英雄机射出的子弹的基准速度（英雄机无特定速度）
      * @param hp        初始生命值
      */
-    private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
-                         int direction, int shootNum, int power, ShootStrategy shootStrategy) {
+    private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp,
-              direction, shootNum, power, shootStrategy);
+              -1, 1, 30, new HeroAircraftDirectShootStrategy());
     }
 
     public static HeroAircraft getInstance() {

@@ -18,8 +18,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
     public EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
                          int direction, int shootNum, int power, ShootStrategy shootStrategy,
                          double itemDropChance, int maxItemNum) {
-        super(locationX, locationY, speedX, speedY, hp,
-              direction, shootNum, power, shootStrategy);
+        super(locationX, locationY, speedX, speedY, hp, direction, shootNum, power, shootStrategy);
         this.itemDropChance = itemDropChance;
         this.maxItemNum = maxItemNum;
     }
@@ -32,7 +31,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
 
     private static final int TOTAL_WEIGHT = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT;
 
-    private static final Random random = new Random();
+    private static final Random RANDOM_INSTANCE = new Random();
 
     public List<BaseItem> dropItems() {
         List<BaseItem> res = new LinkedList<>();
@@ -41,7 +40,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
         for (int i = 0; i < this.maxItemNum; i++) {
             boolean dropItemFlag = Math.random() < this.itemDropChance;
             if (dropItemFlag) {
-                int roll = random.nextInt(TOTAL_WEIGHT);
+                int roll = RANDOM_INSTANCE.nextInt(TOTAL_WEIGHT);
 
                 if (roll < HEALING_ITEM_WEIGHT) {
                     itemFactory = new HealingItemFactory();

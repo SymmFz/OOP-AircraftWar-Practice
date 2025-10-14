@@ -2,7 +2,6 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
-import edu.hitsz.shootstrategy.EnemyAircraftNoShootStrategy;
 
 public class MobEnemyFactory implements EnemyAircraftFactory {
 
@@ -14,9 +13,7 @@ public class MobEnemyFactory implements EnemyAircraftFactory {
                 (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
                 0,
                 5,
-                30,
-                1, 0, 0, new EnemyAircraftNoShootStrategy(),
-                0, 0
+                30
         );
     }
 }

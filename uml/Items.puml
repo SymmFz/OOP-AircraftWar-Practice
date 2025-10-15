@@ -1,7 +1,10 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-scale 4
+
+scale 3
+
+!pragma sveglimit 65536
 
 abstract class EnemyAircraft {
     # itemDropChance:double

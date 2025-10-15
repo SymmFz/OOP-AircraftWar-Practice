@@ -3,18 +3,21 @@
 
 scale 4
 
-class Game
-{
-
+abstract class EnemyAircraft {
+    # itemDropChance:double
+    # maxItemNum:int
+    - {static} HEALING_ITEM_WEIGHT: int = 300 {readOnly}
+    - {static} FIRE_POWER_UP_WEIGHT: int = 150 {readOnly}
+    - {static} BOMB_ITEM_WEIGHT: int = 50 {readOnly}
+    - {static} FIRE_POWER_UP_PLUS_WEIGHT: int = 100 {readOnly}
+    - {static} TOTAL_WEIGHT: int = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + \n\
+                             BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT {readOnly}
+    - {field} {static} RANDOM_INSTANCE: Random = new Random() {readOnly}
+    + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                    int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                    double itemDropChance, int maxItemNum)
+    + dropItems():List<BaseItem>
 }
-
-abstract class EnemyAircraft
-{
-    + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
-    + {abstract} dropItems():List<BaseItem>
-}
-
-Game ..> EnemyAircraft
 
 EnemyAircraft ..> BaseItem
 EnemyAircraft ..> ItemFactory
@@ -39,9 +42,15 @@ class FirePowerUpItemFactory
     + createItem(int locationX, int locationY):BaseItem
 }
 
+class FirePowerUpPlusItemFactory
+{
+    + createItem(int locationX, int locationY):BaseItem
+}
+
 ItemFactory <|.. BombItemFactory
 ItemFactory <|.. HealingItemFactory
 ItemFactory <|.. FirePowerUpItemFactory
+ItemFactory <|.. FirePowerUpPlusItemFactory
 
 
 abstract class AbstractFlyingObject
@@ -58,9 +67,10 @@ abstract class AbstractFlyingObject
     + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
     + forward():void
     + crash(AbstractFlyingObject flyingObject):boolean
-    + setLocation(double locationX, double locationY):void
     + getLocationX():int
     + getLocationY():int
+    + setLocation(double locationX, double locationY):void
+    + getSpeedX():int
     + getSpeedY():int
     + getImage():BufferedImage
     + getWidth():int
@@ -72,34 +82,40 @@ abstract class AbstractFlyingObject
 abstract class BaseItem {
     + BaseItem(int locationX, int locationY, int speedX, int speedY)
     + forward():void
-    + {abstract} active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + {abstract} active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
 }
 
 AbstractFlyingObject <|-- BaseItem
 
 class HealingItem {
-    - healingAmount:int
+    - {static} HEALING_AMOUNT: int = 30 {readOnly}
     + HealingItem(int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
 }
 
 class FirePowerUpItem {
-    - firePowerUpAmount:int
-    + HealingItem(int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + FirePowerUpItem(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
 }
 
 class BombItem {
     + BombItem(int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft, List<EnemyAircraft>, List<BaseBullet>):void
+    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
+}
+
+class FirePowerUpPlusItem {
+    + FirePowerPlusUpItem (int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
 }
 
 BaseItem <|-- HealingItem
 BaseItem <|-- FirePowerUpItem
 BaseItem <|-- BombItem
+BaseItem <|-- FirePowerUpPlusItem
 
 BombItemFactory ..> BombItem
 HealingItemFactory ..> HealingItem
 FirePowerUpItemFactory ..> FirePowerUpItem
+FirePowerUpPlusItemFactory ..> FirePowerUpPlusItem
 
 @enduml

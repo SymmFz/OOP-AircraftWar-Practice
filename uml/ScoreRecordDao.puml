@@ -1,0 +1,65 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+scale 4
+
+class Game
+{
+
+}
+
+Game .right.> ScoreRecordDao
+
+interface ScoreRecordDao
+{
+    + getAllScoreRecords(): List<ScoreRecord>
+    + getSingleScoreRecordByNo(int recordNo): ScoreRecord
+    + printSingleScoreRecordByNo(int recordNo): void
+    + printAllScoreRecord(): void
+    + addRecord(ScoreRecord scoreRecord): void
+    + deleteRecordByNo(int recordNo): void
+}
+
+class ScoreRecordDaoImpl
+{
+    - {field} scoreRecords: List<ScoreRecord>
+    - {field} {static} DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") {readOnly}
+    - {field} {static} FILE_PATH: String = "scores.json" {readOnly}
+    - {field} {static} GSON: Gson {readOnly}
+    - ScoreRecordDaoImpl()
+    - {static} recordToString(ScoreRecord record)
+    - saveToFile(): void
+    - loadFromFile(): List<ScoreRecord>
+    - reRank(): void
+    - sortAndReRank(): void
+    + getAllScoreRecords(): List<ScoreRecord>
+    + getSingleScoreRecordByNo(int recordNo): ScoreRecord
+    + printSingleScoreRecordByNo(int recordNo): void
+    + printAllScoreRecord(): void
+    + addRecord(ScoreRecord record): void
+    + deleteRecordByNo(int recordNo): void
+}
+
+ScoreRecordDao <|..  ScoreRecordDaoImpl
+
+class ScoreRecord
+{
+    - recordNo: int
+    - playerName: String
+    - scores: int
+    - recordTime: LocalDateTime
+    + ScoreRecord()
+    + ScoreRecord(String playerName, int scores)
+    + getScores(): int
+    + setScores(int scores): void
+    + getPlayerName(): String
+    + setPlayerName(String playerName): void
+    + getRecordNo(): int
+    + setRecordNo(int recordNo): void
+    + getRecordTime(): LocalDateTime
+    + setRecordTime(LocalDateTime recordTime): void
+}
+
+ScoreRecordDaoImpl -left-> ScoreRecord
+
+@enduml

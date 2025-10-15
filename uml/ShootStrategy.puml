@@ -1,0 +1,151 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+scale 4
+
+
+abstract class AbstractAircraft
+{
+	# maxHp:int
+    # hp:int
+    # direction:int
+    # shootNum:int
+    # power:int
+    # shootStrategy:ShootStrategy
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                       int direction, int shootNum, int power, ShootStrategy shootStrategy)
+    + decreaseHp(int decrease):void
+    + increaseHp(int increase):void
+    + getHp():int
+    + setStrategy(ShootStrategy strategy):void
+    + shoot():List<BaseBullet>
+ }
+
+class HeroAircraft {
+    - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+    + {static} getInstance():HeroAircraft
+    + forward():void
+}
+
+class HeroAircraftHolder {
+    - {static} heroAircraft:HeroAircraft
+    ~ {static} reset():void
+}
+
+HeroAircraft *--> HeroAircraftHolder
+
+HeroAircraftHolder .[norank].> HeroAircraft : holds instance
+
+AbstractAircraft <|-- HeroAircraft
+
+abstract class EnemyAircraft {
+    # itemDropChance:double
+    # maxItemNum:int
+    - {static} HEALING_ITEM_WEIGHT: int = 300 {readOnly}
+    - {static} FIRE_POWER_UP_WEIGHT: int = 150 {readOnly}
+    - {static} BOMB_ITEM_WEIGHT: int = 50 {readOnly}
+    - {static} FIRE_POWER_UP_PLUS_WEIGHT: int = 100 {readOnly}
+    - {static} TOTAL_WEIGHT: int = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + \n\
+                             BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT {readOnly}
+    - {field} {static} RANDOM_INSTANCE: Random = new Random() {readOnly}
+    + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                    int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                    double itemDropChance, int maxItemNum)
+    + dropItems():List<BaseItem>
+}
+
+AbstractAircraft <|-- EnemyAircraft
+
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+}
+
+class EliteEnemy {
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+}
+
+
+class BossEnemy {
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+}
+
+class ElitePlusEnemy {
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+}
+
+EnemyAircraft <|-- MobEnemy
+EnemyAircraft <|-- EliteEnemy
+EnemyAircraft <|-- BossEnemy
+EnemyAircraft <|-- ElitePlusEnemy
+
+interface ShootStrategy
+{
+	+ {abstract} getDefaultShootNum():int
+    + {abstract} shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+AbstractAircraft o--> ShootStrategy
+
+class HeroAircraftDirectShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+class HeroAircraftScatterShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+class HeroAircraftCircularShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+class EnemyAircraftNoShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+class EnemyAircraftDirectShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+class EnemyAircraftScatterShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+class EnemyAircraftCircularShootStrategy
+{
+	+ getDefaultShootNum():int
+    + shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY, \n\
+            int direction, int shootNum, int power):List<BaseBullet>
+}
+
+ShootStrategy <|.. HeroAircraftDirectShootStrategy
+ShootStrategy <|.. HeroAircraftScatterShootStrategy
+ShootStrategy <|.. HeroAircraftCircularShootStrategy
+ShootStrategy <|.. EnemyAircraftNoShootStrategy
+ShootStrategy <|.. EnemyAircraftDirectShootStrategy
+ShootStrategy <|.. EnemyAircraftScatterShootStrategy
+ShootStrategy <|.. EnemyAircraftCircularShootStrategy
+
+@enduml

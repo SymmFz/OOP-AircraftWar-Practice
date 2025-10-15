@@ -3,6 +3,8 @@
 
 scale 4
 
+!pragma sveglimit 65536
+
 class Game
 {
 

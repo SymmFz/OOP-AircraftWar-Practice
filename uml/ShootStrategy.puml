@@ -3,6 +3,7 @@
 
 scale 4
 
+!pragma sveglimit 65536
 
 abstract class AbstractAircraft
 {
@@ -89,7 +90,7 @@ interface ShootStrategy
             int direction, int shootNum, int power):List<BaseBullet>
 }
 
-AbstractAircraft o--> ShootStrategy
+AbstractAircraft o-right-> ShootStrategy
 
 class HeroAircraftDirectShootStrategy
 {
@@ -140,12 +141,19 @@ class EnemyAircraftCircularShootStrategy
             int direction, int shootNum, int power):List<BaseBullet>
 }
 
-ShootStrategy <|.. HeroAircraftDirectShootStrategy
-ShootStrategy <|.. HeroAircraftScatterShootStrategy
-ShootStrategy <|.. HeroAircraftCircularShootStrategy
-ShootStrategy <|.. EnemyAircraftNoShootStrategy
-ShootStrategy <|.. EnemyAircraftDirectShootStrategy
-ShootStrategy <|.. EnemyAircraftScatterShootStrategy
-ShootStrategy <|.. EnemyAircraftCircularShootStrategy
+ShootStrategy <|.right. HeroAircraftDirectShootStrategy
+ShootStrategy <|.right. HeroAircraftScatterShootStrategy
+ShootStrategy <|.right. HeroAircraftCircularShootStrategy
+ShootStrategy <|.right. EnemyAircraftNoShootStrategy
+ShootStrategy <|.right. EnemyAircraftDirectShootStrategy
+ShootStrategy <|.right. EnemyAircraftScatterShootStrategy
+ShootStrategy <|.right. EnemyAircraftCircularShootStrategy
+
+HeroAircraftDirectShootStrategy -[hidden]down-> HeroAircraftScatterShootStrategy
+HeroAircraftScatterShootStrategy -[hidden]down-> HeroAircraftCircularShootStrategy
+HeroAircraftCircularShootStrategy -[hidden]down-> EnemyAircraftNoShootStrategy
+EnemyAircraftNoShootStrategy -[hidden]down-> EnemyAircraftDirectShootStrategy
+EnemyAircraftDirectShootStrategy -[hidden]down-> EnemyAircraftScatterShootStrategy
+EnemyAircraftScatterShootStrategy -[hidden]down-> EnemyAircraftCircularShootStrategy
 
 @enduml

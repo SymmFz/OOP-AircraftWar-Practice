@@ -1,7 +1,9 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-scale 4
+scale 2
+
+!pragma sveglimit 131072
 
 abstract class AbstractFlyingObject
 {

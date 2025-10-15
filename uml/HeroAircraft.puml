@@ -4,14 +4,17 @@
 scale 2
 
 class HeroAircraft {
-    - heroAircraft:HeroAircraft
-    - shootNum:int
-    - power:int
-    - direction:int
     - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + {static} getInstance():HeroAircraft
     + forward():void
-    + shoot():List<BaseBullet>
 }
+
+class HeroAircraftHolder {
+    - {static} heroAircraft:HeroAircraft
+    ~ {static} reset():void
+}
+
+HeroAircraft *--> HeroAircraftHolder
+HeroAircraftHolder .[norank].> HeroAircraft : holds instance
 
 @enduml

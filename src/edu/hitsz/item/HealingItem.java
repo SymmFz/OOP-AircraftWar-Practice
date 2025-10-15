@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class HealingItem extends BaseItem {
 
-    private final int healingAmount = 30;
+    private static final int HEALING_AMOUNT = 30;
 
     public HealingItem(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
@@ -20,7 +20,7 @@ public class HealingItem extends BaseItem {
     // TODO: use a GameContext Class instead of many arguments
     @Override
     public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets) {
-        heroAircraft.increaseHp(healingAmount);
-        System.out.println("Healing Item active: healing " + healingAmount);
+        heroAircraft.increaseHp(HEALING_AMOUNT);
+        System.out.println("Healing Item active: healing " + HEALING_AMOUNT);
     }
 }

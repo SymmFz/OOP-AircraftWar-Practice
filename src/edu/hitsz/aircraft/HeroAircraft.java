@@ -11,6 +11,7 @@ import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
  */
 public class HeroAircraft extends AbstractAircraft {
 
+    // 静态内部类单例模式：
     // 静态内部类，为了实现单例模式的测试，需要设置类为 package-private，内部的实例为 private
     static class HeroAircraftHolder {
         private static HeroAircraft heroAircraft = new HeroAircraft(

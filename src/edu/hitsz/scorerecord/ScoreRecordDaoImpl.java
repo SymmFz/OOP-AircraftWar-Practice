@@ -19,8 +19,10 @@ import java.util.List;
 public class ScoreRecordDaoImpl implements ScoreRecordDao {
 
     private final List<ScoreRecord> scoreRecords;
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private final Gson gson = new GsonBuilder()
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final String FILE_PATH = "scores.json";
+    private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
                 @Override
                 public void write(JsonWriter out, LocalDateTime value) throws IOException {
@@ -33,15 +35,21 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
                 }
             })
             .create();
-    private final String FILE_PATH = "scores.json";
 
     public ScoreRecordDaoImpl() {
         this.scoreRecords = loadFromFile();
     }
 
+    private static String recordToString(ScoreRecord record) {
+        return "第 " + record.getRecordNo() + " 名：" +
+                record.getPlayerName() + "，" +
+                record.getScores() + "，" +
+                record.getRecordTime().format(DATE_TIME_FORMATTER);
+    }
+
     private void saveToFile() {
         try (Writer writer = new FileWriter(FILE_PATH)) {
-            gson.toJson(this.scoreRecords, writer);
+            GSON.toJson(this.scoreRecords, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +64,7 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
         try (Reader reader = new FileReader(FILE_PATH)) {
             Type listType = new TypeToken<ArrayList<ScoreRecord>>() {
             }.getType();
-            List<ScoreRecord> records = gson.fromJson(reader, listType);
+            List<ScoreRecord> records = GSON.fromJson(reader, listType);
             if (records == null) {
                 return new ArrayList<>();
             }
@@ -73,11 +81,9 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
         }
     }
 
-    private String recordToString(ScoreRecord record) {
-        return "第 " + record.getRecordNo() + " 名：" +
-                record.getPlayerName() + "，" +
-                record.getScores() + "，" +
-                record.getRecordTime().format(dateTimeFormatter);
+    private void sortAndReRank() {
+        this.scoreRecords.sort(Comparator.comparingInt(ScoreRecord::getScores).reversed());
+        reRank();
     }
 
     @Override
@@ -116,7 +122,7 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
         int insertIndex = Collections.binarySearch(this.scoreRecords, scoreRecord,
                 Comparator.comparingInt(ScoreRecord::getScores).reversed());
         if (insertIndex < 0) {
-            insertIndex = -insertIndex + 1;
+            insertIndex = - insertIndex - 1;
         }
 
         this.scoreRecords.add(insertIndex, scoreRecord);

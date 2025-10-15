@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface ShootStrategy {
 
-   int getDefaultShootNum();
+    int getDefaultShootNum();
 
     List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
-                           int direction, int shootNum, int power);
+            int direction, int shootNum, int power);
 }

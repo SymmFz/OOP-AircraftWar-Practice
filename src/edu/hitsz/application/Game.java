@@ -124,24 +124,7 @@ public class Game extends JPanel {
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
                 // 新敌机产生
-                if (enemyAircrafts.size() < enemyMaxNumber) {
-                    if (score >= bossScoreThreshold && !bossExists) {
-                        enemyAircrafts.add(bossEnemyFactory.createEnemyAircraft());
-                        bossScoreThreshold += BOSS_SCORE_INTERVAL;
-                        bossExists = true;
-                    } else {
-                        boolean nextEnemyIsElite = Math.random() < ELITE_SPAWN_CHANCE;
-                        if (nextEnemyIsElite) {
-                            if (Math.random() < 0.75) {
-                                enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
-                            } else {
-                                enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
-                            }
-                        } else {
-                            enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
-                        }
-                    }
-                }
+                generateEnemyAircraftAction();
                 // 飞机射出子弹
                 shootAction();
             }
@@ -190,6 +173,27 @@ public class Game extends JPanel {
     // ***********************
     // Action 各部分
     // ***********************
+
+    private void generateEnemyAircraftAction() {
+        if (enemyAircrafts.size() < enemyMaxNumber) {
+            if (score >= bossScoreThreshold && !bossExists) {
+                enemyAircrafts.add(bossEnemyFactory.createEnemyAircraft());
+                bossScoreThreshold += BOSS_SCORE_INTERVAL;
+                bossExists = true;
+            } else {
+                boolean nextEnemyIsElite = Math.random() < ELITE_SPAWN_CHANCE;
+                if (nextEnemyIsElite) {
+                    if (Math.random() < 0.75) {
+                        enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
+                    } else {
+                        enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
+                    }
+                } else {
+                    enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
+                }
+            }
+        }
+    }
 
     private boolean timeCountAndNewCycleJudge() {
         cycleTime += timeInterval;

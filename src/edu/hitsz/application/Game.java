@@ -271,15 +271,9 @@ public class Game extends JPanel {
                     if (enemyAircraft.notValid()) {
                         // 获得分数，产生道具补给
                         items.addAll(enemyAircraft.dropItems());
-                        if (enemyAircraft instanceof EliteEnemy) {
-                            score += ELITE_ENEMY_SCORE;
-                        } else if (enemyAircraft instanceof ElitePlusEnemy) {
-                            score += ELITE_PLUS_ENEMY_SCORE;
-                        } else if (enemyAircraft instanceof BossEnemy) {
-                            score += BOSS_ENEMY_SCORE;
+                        score += enemyAircraft.getScoreNum();
+                        if (enemyAircraft instanceof BossEnemy) {
                             bossExists = false;
-                        } else {
-                            score += MOB_ENEMY_SCORE;
                         }
                     }
                 }

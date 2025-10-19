@@ -19,4 +19,9 @@ public class ElitePlusEnemy extends EnemyAircraft {
             vanish();
         }
     }
+
+    @Override
+    public int getScoreNum() {
+        return 500;
+    }
 }

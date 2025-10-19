@@ -16,8 +16,8 @@ public abstract class EnemyAircraft extends AbstractAircraft {
     protected int maxItemNum;
 
     public EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp,
-                         int direction, int shootNum, int power, ShootStrategy shootStrategy,
-                         double itemDropChance, int maxItemNum) {
+            int direction, int shootNum, int power, ShootStrategy shootStrategy,
+            double itemDropChance, int maxItemNum) {
         super(locationX, locationY, speedX, speedY, hp, direction, shootNum, power, shootStrategy);
         this.itemDropChance = itemDropChance;
         this.maxItemNum = maxItemNum;
@@ -29,7 +29,8 @@ public abstract class EnemyAircraft extends AbstractAircraft {
     private static final int BOMB_ITEM_WEIGHT = 50;
     private static final int FIRE_POWER_UP_PLUS_WEIGHT = 100;
 
-    private static final int TOTAL_WEIGHT = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT;
+    private static final int TOTAL_WEIGHT = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT
+            + FIRE_POWER_UP_PLUS_WEIGHT;
 
     private static final Random RANDOM_INSTANCE = new Random();
 
@@ -46,7 +47,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
                     itemFactory = new HealingItemFactory();
                 } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT) {
                     itemFactory = new FirePowerUpItemFactory();
-                } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT){
+                } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT) {
                     itemFactory = new FirePowerUpPlusItemFactory();
                 } else {
                     itemFactory = new BombItemFactory();
@@ -57,4 +58,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
         }
         return res;
     }
+
+    public abstract int getScoreNum();
+
 }

@@ -4,8 +4,7 @@ import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
-import edu.hitsz.scorerecord.ScoreRecord;
-import edu.hitsz.scorerecord.ScoreRecordDaoImpl;
+import edu.hitsz.scorerecord.ScoreBoardService;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import javax.swing.*;
@@ -40,7 +39,7 @@ public class Game extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<BaseItem> items;
 
-    private final ScoreRecordDaoImpl scoreRecordDaoImpl = new ScoreRecordDaoImpl();
+    private final ScoreBoardService scoreBoardService = new ScoreBoardService();
 
     /**
      * 屏幕中出现的敌机最大数量
@@ -51,11 +50,6 @@ public class Game extends JPanel {
      * 下一个刷新的非 Boss 敌人为精英敌人的概率
      */
     private final double ELITE_SPAWN_CHANCE = 0.2;
-
-    private final int MOB_ENEMY_SCORE = 100;
-    private final int ELITE_ENEMY_SCORE = 300;
-    private final int ELITE_PLUS_ENEMY_SCORE = 500;
-    private final int BOSS_ENEMY_SCORE = 1500;
 
     /**
      * 下一个 Boss 敌人出现所需的分数阈值
@@ -152,13 +146,8 @@ public class Game extends JPanel {
                 // 游戏结束
                 executorService.shutdown();
                 gameOverFlag = true;
-                ScoreRecord scoreRecord = new ScoreRecord("testUser", this.score);
-                scoreRecordDaoImpl.addRecord(scoreRecord);
-                System.out.println("Game Over!");
-                System.out.println("===============================");
-                System.out.println("           得分排行榜          ");
-                System.out.println("===============================");
-                scoreRecordDaoImpl.printAllScoreRecord();
+                scoreBoardService.savePlayerScoreToFile("testUser", score);
+                scoreBoardService.printScoreBoardInConsole();
             }
         };
 

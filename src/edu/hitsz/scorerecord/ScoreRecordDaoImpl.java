@@ -10,7 +10,6 @@ import com.google.gson.stream.JsonWriter;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,7 +19,6 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
 
     private final List<ScoreRecord> scoreRecords;
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final String FILE_PATH = "scores.json";
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
@@ -34,17 +32,11 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
                     return LocalDateTime.parse(in.nextString());
                 }
             })
+            .setPrettyPrinting()
             .create();
 
     public ScoreRecordDaoImpl() {
         this.scoreRecords = loadFromFile();
-    }
-
-    private static String recordToString(ScoreRecord record) {
-        return "第 " + record.getRecordNo() + " 名：" +
-                record.getPlayerName() + "，" +
-                record.getScores() + "，" +
-                record.getRecordTime().format(DATE_TIME_FORMATTER);
     }
 
     private void saveToFile() {
@@ -102,23 +94,7 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
     }
 
     @Override
-    public void printSingleScoreRecordByNo(int recordNo) {
-        for (ScoreRecord record : this.scoreRecords) {
-            if (record.getRecordNo() == recordNo) {
-                System.out.println(recordToString(record));
-            }
-        }
-    }
-
-    @Override
-    public void printAllScoreRecord() {
-        for (ScoreRecord record : this.scoreRecords) {
-            System.out.println(recordToString(record));
-        }
-    }
-
-    @Override
-    public void addRecord(ScoreRecord scoreRecord) {
+    public synchronized void addRecord(ScoreRecord scoreRecord) {
         int insertIndex = Collections.binarySearch(this.scoreRecords, scoreRecord,
                 Comparator.comparingInt(ScoreRecord::getScores).reversed());
         if (insertIndex < 0) {
@@ -131,7 +107,7 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
     }
 
     @Override
-    public void deleteRecordByNo(int recordNo) {
+    public synchronized void deleteRecordByNo(int recordNo) {
         boolean removed = this.scoreRecords.removeIf(record -> record.getRecordNo() == recordNo);
 
         if (removed) {

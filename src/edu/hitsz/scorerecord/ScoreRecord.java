@@ -1,6 +1,7 @@
 package edu.hitsz.scorerecord;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ScoreRecord {
 
@@ -51,4 +52,13 @@ public class ScoreRecord {
     public void setRecordTime(LocalDateTime recordTime) {
         this.recordTime = recordTime;
     }
+
+    @Override
+    public String toString() {
+        return "第 " + getRecordNo() + " 名：" +
+                getPlayerName() + "，" +
+                getScores() + "，" +
+                getRecordTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
 }

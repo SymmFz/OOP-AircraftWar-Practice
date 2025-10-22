@@ -1,5 +1,10 @@
 package edu.hitsz.application;
 
+import edu.hitsz.game.AbstractGame;
+import edu.hitsz.scorerecord.ScoreBoardService;
+import edu.hitsz.scorerecord.ScoreRecordDao;
+import edu.hitsz.scorerecord.ScoreRecordDaoImpl;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,6 +16,15 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
+    public static final CardLayout cardLayout = new CardLayout(0,0);
+    public static final JPanel cardPanel = new JPanel(cardLayout);
+
+    public static final String START_MENU_VIEW = "startMenuView";
+    public static final String GAME_SETTINGS_VIEW = "gameSettingsView";
+    public static final String SCORE_BOARD_VIEW = "scoreBoardView";
+    public static final String GAME_VIEW = "gameView";
+
+    public static AbstractGame game;
 
     public static void main(String[] args) {
 
@@ -26,9 +40,19 @@ public class Main {
                 WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Game game = new Game();
-        frame.add(game);
+        frame.add(cardPanel);
+
+        ScoreRecordDaoImpl scoreRecordDao = ScoreRecordDaoImpl.getInstance();
+        ScoreBoardService scoreBoardService = new ScoreBoardService(scoreRecordDao);
+
+        StartMenuView startMenuView = new StartMenuView();
+        GameSettingsView gameSettingsView = new GameSettingsView(scoreBoardService);
+        ScoreBoardView scoreBoardView = new ScoreBoardView(scoreBoardService);
+
+        cardPanel.add(startMenuView.getMainPanel(), START_MENU_VIEW);
+        cardPanel.add(gameSettingsView.getMainPanel(), GAME_SETTINGS_VIEW);
+        cardPanel.add(scoreBoardView.getMainPanel(), SCORE_BOARD_VIEW);
+
         frame.setVisible(true);
-        game.action();
     }
 }

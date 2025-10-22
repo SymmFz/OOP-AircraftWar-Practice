@@ -55,10 +55,10 @@ public class ScoreRecord {
 
     @Override
     public String toString() {
-        return "第 " + getRecordNo() + " 名：" +
-                getPlayerName() + "，" +
-                getScores() + "，" +
-                getRecordTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return String.format(
+                "第 %d 名：%s，%d，%s",
+                getRecordNo(), getPlayerName(), getScores(),
+                getRecordTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        );
     }
-
 }

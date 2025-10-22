@@ -46,6 +46,10 @@ public class HeroAircraft extends AbstractAircraft {
         return HeroAircraftHolder.heroAircraft;
     }
 
+    public static void resetInstance() {
+        HeroAircraftHolder.reset();
+    }
+
     @Override
     public void forward() {
         // 英雄机由鼠标控制，不通过forward函数移动

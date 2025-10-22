@@ -10,14 +10,9 @@ import com.google.gson.stream.JsonWriter;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class ScoreRecordDaoImpl implements ScoreRecordDao {
-
-    private final List<ScoreRecord> scoreRecords;
 
     private static final String FILE_PATH = "scores.json";
     private static final Gson GSON = new GsonBuilder()
@@ -35,11 +30,17 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
             .setPrettyPrinting()
             .create();
 
-    public ScoreRecordDaoImpl() {
+    // 单例模式，确保缓存一致性，通过锁确保线程安全
+    private final List<ScoreRecord> scoreRecords;
+    private static final ScoreRecordDaoImpl instance = new ScoreRecordDaoImpl();
+
+    private ScoreRecordDaoImpl() {
         this.scoreRecords = loadFromFile();
     }
 
-    private void saveToFile() {
+    public static ScoreRecordDaoImpl getInstance() { return instance; }
+
+    private synchronized void saveToFile() {
         try (Writer writer = new FileWriter(FILE_PATH)) {
             GSON.toJson(this.scoreRecords, writer);
         } catch (IOException e) {
@@ -47,7 +48,7 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
         }
     }
 
-    private List<ScoreRecord> loadFromFile() {
+    private synchronized List<ScoreRecord> loadFromFile() {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
             return new ArrayList<>();
@@ -67,24 +68,24 @@ public class ScoreRecordDaoImpl implements ScoreRecordDao {
         }
     }
 
-    private void reRank() {
+    private synchronized void reRank() {
         for (int i = 0; i < this.scoreRecords.size(); i++) {
             this.scoreRecords.get(i).setRecordNo(i + 1);
         }
     }
 
-    private void sortAndReRank() {
+    private synchronized void sortAndReRank() {
         this.scoreRecords.sort(Comparator.comparingInt(ScoreRecord::getScores).reversed());
         reRank();
     }
 
     @Override
-    public List<ScoreRecord> getAllScoreRecords() {
-        return this.scoreRecords;
+    public synchronized List<ScoreRecord> getAllScoreRecords() {
+        return new ArrayList<>(this.scoreRecords);
     }
 
     @Override
-    public ScoreRecord getSingleScoreRecordByNo(int recordNo) {
+    public synchronized ScoreRecord getSingleScoreRecordByNo(int recordNo) {
         for (ScoreRecord record : this.scoreRecords) {
             if (record.getRecordNo() == recordNo) {
                 return record;

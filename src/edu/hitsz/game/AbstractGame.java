@@ -1,6 +1,9 @@
-package edu.hitsz.application;
+package edu.hitsz.game;
 
 import edu.hitsz.aircraft.*;
+import edu.hitsz.application.HeroController;
+import edu.hitsz.application.ImageManager;
+import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
@@ -19,7 +22,7 @@ import java.util.concurrent.*;
  *
  * @author hitsz
  */
-public class Game extends JPanel {
+public abstract class AbstractGame extends JPanel {
 
     private int backGroundTop = 0;
 
@@ -39,7 +42,9 @@ public class Game extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<BaseItem> items;
 
-    private final ScoreBoardService scoreBoardService = new ScoreBoardService();
+    protected ScoreBoardService scoreBoardService;
+
+    protected BufferedImage backgroundImage = ImageManager.BACKGROUND_IMAGE;
 
     /**
      * 屏幕中出现的敌机最大数量
@@ -84,12 +89,18 @@ public class Game extends JPanel {
      */
     private boolean gameOverFlag = false;
 
-    public Game() {
+    public AbstractGame(ScoreBoardService scoreBoardService) {
+        HeroAircraft.resetInstance();
         heroAircraft = HeroAircraft.getInstance();
+
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
         items = new LinkedList<>();
+
+        this.scoreBoardService = scoreBoardService;
+
+        configureGame();
 
         /**
          * Scheduled 线程池，用于定时任务调度
@@ -103,6 +114,8 @@ public class Game extends JPanel {
         new HeroController(this, heroAircraft);
 
     }
+
+    public abstract void configureGame();
 
     /**
      * 游戏启动入口，执行游戏逻辑
@@ -146,8 +159,10 @@ public class Game extends JPanel {
                 // 游戏结束
                 executorService.shutdown();
                 gameOverFlag = true;
-                scoreBoardService.savePlayerScoreToFile("testUser", score);
                 scoreBoardService.printScoreBoardInConsole();
+                Main.cardLayout.show(Main.cardPanel, Main.SCORE_BOARD_VIEW);
+                String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n 请输入玩家名记录得分：", score));
+                scoreBoardService.addRecord(playerName, score);
             }
         };
 
@@ -321,8 +336,8 @@ public class Game extends JPanel {
         super.paint(g);
 
         // 绘制背景,图片滚动
-        g.drawImage(ImageManager.BACKGROUND_IMAGE, 0, this.backGroundTop - Main.WINDOW_HEIGHT, null);
-        g.drawImage(ImageManager.BACKGROUND_IMAGE, 0, this.backGroundTop, null);
+        g.drawImage(backgroundImage, 0, this.backGroundTop - Main.WINDOW_HEIGHT, null);
+        g.drawImage(backgroundImage, 0, this.backGroundTop, null);
         this.backGroundTop += 1;
         if (this.backGroundTop == Main.WINDOW_HEIGHT) {
             this.backGroundTop = 0;

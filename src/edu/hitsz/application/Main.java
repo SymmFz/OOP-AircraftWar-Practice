@@ -1,6 +1,7 @@
 package edu.hitsz.application;
 
 import edu.hitsz.game.AbstractGame;
+import edu.hitsz.game.GameDifficulty;
 import edu.hitsz.scorerecord.ScoreBoardService;
 import edu.hitsz.scorerecord.ScoreRecordDao;
 import edu.hitsz.scorerecord.ScoreRecordDaoImpl;
@@ -16,6 +17,7 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
+
     public static final CardLayout cardLayout = new CardLayout(0,0);
     public static final JPanel cardPanel = new JPanel(cardLayout);
 

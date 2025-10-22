@@ -1,5 +1,6 @@
 package edu.hitsz.application;
 
+import edu.hitsz.game.GameDifficulty;
 import edu.hitsz.scorerecord.ScoreBoardService;
 import edu.hitsz.scorerecord.ScoreBoardTableModel;
 
@@ -16,13 +17,20 @@ public class ScoreBoardView {
     private JTable scoreTable;
     private JButton deleteButton;
     private JButton returnButton;
+    private JLabel gameDifficultyField;
 
     public ScoreBoardView(ScoreBoardService scoreBoardService) {
 
-        ScoreBoardTableModel model = new ScoreBoardTableModel(scoreBoardService);
+        ScoreBoardTableModel model = new ScoreBoardTableModel(scoreBoardService, GameDifficulty.NORMAL);
+        model.setOnDifficultyChangeCallback(
+                newDifficulty -> {
+                    gameDifficultyField.setText("难度：" + newDifficulty.name());
+                }
+        );
         scoreBoardService.addObserver(model);
 
         scoreTable.setModel(model);
+        model.refreshData(GameDifficulty.NORMAL);
         tableScrollPanel.setViewportView(scoreTable);
 
         deleteButton.addActionListener(new ActionListener() {
@@ -35,14 +43,11 @@ public class ScoreBoardView {
                     return;
                 }
 
-                String noValueStr = (String) scoreTable.getValueAt(row, 0);
-                int numberOfRecord = Integer.parseInt(noValueStr);
-
                 int result = JOptionPane.showConfirmDialog(deleteButton,
                         "是否确定中删除？");
                 if (JOptionPane.YES_OPTION == result) {
                     model.removeRow(row);
-                    scoreBoardService.deleteRecordByNo(numberOfRecord);
+                    scoreBoardService.deleteRecordByIndex(row, model.getGameDifficulty());
                 }
             }
         });

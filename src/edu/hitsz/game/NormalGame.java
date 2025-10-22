@@ -11,6 +11,7 @@ public class NormalGame extends AbstractGame {
 
     @Override
     public void configureGame() {
+        this.gameDifficulty = GameDifficulty.NORMAL;
         this.backgroundImage = ImageManager.BACKGROUND_IMAGE3;
     }
 }

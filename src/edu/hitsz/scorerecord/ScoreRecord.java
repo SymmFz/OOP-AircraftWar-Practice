@@ -1,24 +1,25 @@
 package edu.hitsz.scorerecord;
 
+import edu.hitsz.game.GameDifficulty;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ScoreRecord {
 
-    private int recordNo;
     private String playerName;
     private int scores;
     private LocalDateTime recordTime;
+    private GameDifficulty gameDifficulty;
 
     public ScoreRecord() {
-
     }
 
-    public ScoreRecord(String playerName, int scores) {
-        this.recordNo = 0;
+    public ScoreRecord(String playerName, int scores, LocalDateTime recordTime, GameDifficulty gameDifficulty) {
         this.playerName = playerName;
         this.scores = scores;
-        this.recordTime = LocalDateTime.now();
+        this.recordTime = recordTime;
+        this.gameDifficulty = gameDifficulty;
     }
 
     public int getScores() {
@@ -37,14 +38,6 @@ public class ScoreRecord {
         this.playerName = playerName;
     }
 
-    public int getRecordNo() {
-        return recordNo;
-    }
-
-    public void setRecordNo(int recordNo) {
-        this.recordNo = recordNo;
-    }
-
     public LocalDateTime getRecordTime() {
         return recordTime;
     }
@@ -53,12 +46,21 @@ public class ScoreRecord {
         this.recordTime = recordTime;
     }
 
+    public GameDifficulty getGameDifficulty() {
+        return gameDifficulty;
+    }
+
+    public void setGameDifficulty(GameDifficulty gameDifficulty) {
+        this.gameDifficulty = gameDifficulty;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "第 %d 名：%s，%d，%s",
-                getRecordNo(), getPlayerName(), getScores(),
+                "%s，%d，%s",
+                getPlayerName(), getScores(),
                 getRecordTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
         );
     }
+
 }

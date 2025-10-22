@@ -42,6 +42,7 @@ public abstract class AbstractGame extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<BaseItem> items;
 
+    protected GameDifficulty gameDifficulty;
     protected ScoreBoardService scoreBoardService;
 
     protected BufferedImage backgroundImage = ImageManager.BACKGROUND_IMAGE;
@@ -116,6 +117,7 @@ public abstract class AbstractGame extends JPanel {
     }
 
     public abstract void configureGame();
+    public GameDifficulty getGameDifficulty() { return this.gameDifficulty; }
 
     /**
      * 游戏启动入口，执行游戏逻辑
@@ -159,10 +161,10 @@ public abstract class AbstractGame extends JPanel {
                 // 游戏结束
                 executorService.shutdown();
                 gameOverFlag = true;
-                scoreBoardService.printScoreBoardInConsole();
+                String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n请输入玩家名记录得分：", score));
+                scoreBoardService.addRecord(playerName, score, gameDifficulty);
+                scoreBoardService.printScoreBoardInConsole(gameDifficulty);
                 Main.cardLayout.show(Main.cardPanel, Main.SCORE_BOARD_VIEW);
-                String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n 请输入玩家名记录得分：", score));
-                scoreBoardService.addRecord(playerName, score);
             }
         };
 

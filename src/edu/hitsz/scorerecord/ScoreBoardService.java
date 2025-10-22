@@ -1,5 +1,8 @@
 package edu.hitsz.scorerecord;
 
+import edu.hitsz.game.GameDifficulty;
+
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,35 +26,35 @@ public class ScoreBoardService {
         observers.remove(observer);
     }
 
-    private void notifyObservers() {
+    private void notifyObservers(GameDifficulty difficulty) {
         for (ScoreRecordObserver observer : observers) {
-            observer.onScoreRecordChanged();
+            observer.onScoreRecordChanged(difficulty);
         }
     }
 
-    public void addRecord(String player, int score) {
-        ScoreRecord scoreRecord = new ScoreRecord(player, score);
+    public void addRecord(String player, int score, GameDifficulty difficulty) {
+        ScoreRecord scoreRecord = new ScoreRecord(player, score, LocalDateTime.now(), difficulty);
         dao.addRecord(scoreRecord);
-        notifyObservers();
+        notifyObservers(difficulty);
     }
 
-    public void deleteRecordByNo(int No) {
-        dao.deleteRecordByNo(No);
-        notifyObservers();
+    public void deleteRecordByIndex(int index, GameDifficulty difficulty) {
+        dao.deleteRecordByIndex(index, difficulty);
+        notifyObservers(difficulty);
     }
 
     public String[] getScoreBoardColumnName() {
         return new String[]{"名次", "玩家名", "得分", "记录时间"};
     }
 
-    public String[][] getScoreBoardTableData() {
-        List<ScoreRecord> records = dao.getAllScoreRecords();
+    public String[][] getScoreBoardTableData(GameDifficulty difficulty) {
+        List<ScoreRecord> records = dao.getAllScoreRecords(difficulty);
         int numberOfRows = records.size();
         String[][] scoreBoardTableData = new String[numberOfRows][];
         int index = 0;
         for (ScoreRecord record : records) {
             String[] recordFields = new String[]{
-                    Integer.toString(record.getRecordNo()),
+                    Integer.toString(index + 1),
                     record.getPlayerName(),
                     Integer.toString(record.getScores()),
                     record.getRecordTime().format(TIME_FORMATTER)
@@ -62,22 +65,23 @@ public class ScoreBoardService {
         return scoreBoardTableData;
     }
 
-    public void printSingleScoreRecordByNo(int recordNo) {
-        ScoreRecord record = dao.getSingleScoreRecordByNo(recordNo);
+    public void printSingleScoreRecordByIndex(int index, GameDifficulty difficulty) {
+        ScoreRecord record = dao.getSingleScoreRecordByIndex(index, difficulty);
         System.out.println(record);
     }
 
-    public void printAllScoreRecord() {
-        for (ScoreRecord record : dao.getAllScoreRecords()) {
+    public void printAllScoreRecord(GameDifficulty difficulty) {
+        for (ScoreRecord record : dao.getAllScoreRecords(difficulty)) {
             System.out.println(record);
         }
     }
 
-    public void printScoreBoardInConsole() {
+    public void printScoreBoardInConsole(GameDifficulty difficulty) {
         System.out.println("AbstractGame Over!");
+        System.out.println("难度：" + difficulty);
         System.out.println("===============================");
         System.out.println("           得分排行榜          ");
         System.out.println("===============================");
-        printAllScoreRecord();
+        printAllScoreRecord(difficulty);
     }
 }

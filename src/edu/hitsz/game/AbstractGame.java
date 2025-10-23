@@ -4,6 +4,7 @@ import edu.hitsz.aircraft.*;
 import edu.hitsz.application.HeroController;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
+import edu.hitsz.application.MusicManager;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
@@ -45,6 +46,7 @@ public abstract class AbstractGame extends JPanel {
     protected GameDifficulty gameDifficulty;
     protected ScoreBoardService scoreBoardService;
 
+    protected MusicManager musicManager;
     protected BufferedImage backgroundImage = ImageManager.BACKGROUND_IMAGE;
 
     /**
@@ -100,6 +102,7 @@ public abstract class AbstractGame extends JPanel {
         items = new LinkedList<>();
 
         this.scoreBoardService = scoreBoardService;
+        this.musicManager = MusicManager.getInstance();
 
         configureGame();
 
@@ -123,6 +126,8 @@ public abstract class AbstractGame extends JPanel {
      * 游戏启动入口，执行游戏逻辑
      */
     public void action() {
+
+        musicManager.playDefaultBgm();
 
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
         Runnable task = () -> {
@@ -159,8 +164,11 @@ public abstract class AbstractGame extends JPanel {
             // 游戏结束检查英雄机是否存活
             if (heroAircraft.getHp() <= 0) {
                 // 游戏结束
+                musicManager.stopBgm();
+                musicManager.playGameOverSoundEffect();
                 executorService.shutdown();
                 gameOverFlag = true;
+
                 String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n请输入玩家名记录得分：", score));
                 scoreBoardService.addRecord(playerName, score, gameDifficulty);
                 scoreBoardService.printScoreBoardInConsole(gameDifficulty);
@@ -186,6 +194,8 @@ public abstract class AbstractGame extends JPanel {
                 enemyAircrafts.add(bossEnemyFactory.createEnemyAircraft());
                 bossScoreThreshold += BOSS_SCORE_INTERVAL;
                 bossExists = true;
+
+                musicManager.playBossBgm();
             } else {
                 boolean nextEnemyIsElite = Math.random() < ELITE_SPAWN_CHANCE;
                 if (nextEnemyIsElite) {
@@ -284,8 +294,11 @@ public abstract class AbstractGame extends JPanel {
                         score += enemyAircraft.getScoreNum();
                         if (enemyAircraft instanceof BossEnemy) {
                             bossExists = false;
+                            musicManager.playDefaultBgm();
                         }
                     }
+
+                    musicManager.playBulletHitSoundEffect();
                 }
             }
         }
@@ -303,6 +316,8 @@ public abstract class AbstractGame extends JPanel {
             if (heroAircraft.crash(item)) {
                 item.active(heroAircraft, enemyAircrafts, enemyBullets);
                 item.vanish();
+
+                musicManager.playGetSupplySoundEffect();
             }
         }
     }

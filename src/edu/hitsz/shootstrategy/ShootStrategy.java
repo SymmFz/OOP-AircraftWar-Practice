@@ -11,4 +11,6 @@ public interface ShootStrategy {
 
     List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
             int direction, int shootNum, int power);
+
+    int getPowerLevel();
 }

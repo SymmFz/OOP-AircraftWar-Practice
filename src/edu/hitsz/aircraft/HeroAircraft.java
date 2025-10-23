@@ -2,7 +2,16 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
+import edu.hitsz.item.BaseItem;
+import edu.hitsz.scorerecord.ScoreBoardService;
 import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
+import edu.hitsz.shootstrategy.ShootStrategy;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 英雄飞机，游戏玩家操控
@@ -10,6 +19,8 @@ import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
  * @author hitsz
  */
 public class HeroAircraft extends AbstractAircraft {
+
+    private ScheduledFuture<?> shootingStateTimer;
 
     // 静态内部类单例模式：
     // 静态内部类，为了实现单例模式的测试，需要设置类为 package-private，内部的实例为 private
@@ -53,5 +64,23 @@ public class HeroAircraft extends AbstractAircraft {
     @Override
     public void forward() {
         // 英雄机由鼠标控制，不通过forward函数移动
+    }
+
+    public void upgradeShootingStrategyForPeriod(ShootStrategy newStrategy,
+                                                 int duration, TimeUnit unit,
+                                                 ScheduledExecutorService executorService) {
+        if (newStrategy.getPowerLevel() < this.shootStrategy.getPowerLevel()) {
+            return;
+        }
+        if (shootingStateTimer != null && !shootingStateTimer.isDone()) {
+            shootingStateTimer.cancel(false);
+        }
+
+        this.setStrategy(newStrategy);
+        Runnable restoreTask = () -> {
+            this.setStrategy(new HeroAircraftDirectShootStrategy());
+        };
+
+        this.shootingStateTimer = executorService.schedule(restoreTask, duration, unit);
     }
 }

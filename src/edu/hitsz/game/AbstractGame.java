@@ -111,7 +111,7 @@ public abstract class AbstractGame extends JPanel {
          * 关于alibaba code guide：可命名的 ThreadFactory 一般需要第三方包
          * apache 第三方库： org.apache.commons.lang3.concurrent.BasicThreadFactory
          */
-        this.executorService = new ScheduledThreadPoolExecutor(1,
+        this.executorService = new ScheduledThreadPoolExecutor(2,
                 new BasicThreadFactory.Builder().namingPattern("game-action-%d").daemon(true).build());
 
         // 启动英雄机鼠标监听
@@ -325,7 +325,7 @@ public abstract class AbstractGame extends JPanel {
         // 我方获得道具，道具生效
         for (BaseItem item : items) {
             if (heroAircraft.crash(item)) {
-                item.active(heroAircraft, enemyAircrafts, enemyBullets);
+                item.active(heroAircraft, enemyAircrafts, enemyBullets, this.executorService);
                 item.vanish();
 
                 musicManager.playGetSupplySoundEffect();

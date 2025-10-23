@@ -18,4 +18,8 @@ public class EnemyAircraftNoShootStrategy implements ShootStrategy {
                                   int direction, int shootNum, int power) {
         return new LinkedList<>();
     }
+
+
+    @Override
+    public int getPowerLevel() { return 0; }
 }

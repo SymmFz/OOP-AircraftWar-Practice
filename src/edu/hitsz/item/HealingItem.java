@@ -5,6 +5,7 @@ import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.bullet.BaseBullet;
 
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * 加血道具类
@@ -19,7 +20,8 @@ public class HealingItem extends BaseItem {
 
     // TODO: use a GameContext Class instead of many arguments
     @Override
-    public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets) {
+    public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets,
+                       ScheduledExecutorService executorService) {
         heroAircraft.increaseHp(HEALING_AMOUNT);
         System.out.println("Healing Item active: healing " + HEALING_AMOUNT);
     }

@@ -32,4 +32,7 @@ public class HeroAircraftDirectShootStrategy implements ShootStrategy{
         }
         return res;
     }
+
+    @Override
+    public int getPowerLevel() { return 1; }
 }

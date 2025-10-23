@@ -4,13 +4,19 @@ import edu.hitsz.aircraft.EnemyAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.shootstrategy.HeroAircraftCircularShootStrategy;
+import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
+import edu.hitsz.shootstrategy.HeroAircraftScatterShootStrategy;
 
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 火力道具类
  */
 public class FirePowerUpPlusItem extends BaseItem {
+
+    private static final int DURATION_SECONDS = 16;
 
     public FirePowerUpPlusItem(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
@@ -18,8 +24,15 @@ public class FirePowerUpPlusItem extends BaseItem {
 
     // TODO: use a GameContext Class instead of many arguments
     @Override
-    public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets) {
+    public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets,
+                       ScheduledExecutorService executorService) {
         System.out.println("FireSupply active!");
-        heroAircraft.setStrategy(new HeroAircraftCircularShootStrategy());
+
+        heroAircraft.upgradeShootingStrategyForPeriod(
+                new HeroAircraftCircularShootStrategy(),
+                DURATION_SECONDS,
+                TimeUnit.SECONDS,
+                executorService
+        );
     }
 }

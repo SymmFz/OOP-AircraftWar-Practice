@@ -32,4 +32,8 @@ public class EnemyAircraftDirectShootStrategy implements ShootStrategy{
         }
         return res;
     }
+
+
+    @Override
+    public int getPowerLevel() { return 1; }
 }

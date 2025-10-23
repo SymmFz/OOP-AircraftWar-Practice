@@ -13,5 +13,9 @@ public class NormalGame extends AbstractGame {
     public void configureGame() {
         this.gameDifficulty = GameDifficulty.NORMAL;
         this.backgroundImage = ImageManager.BACKGROUND_IMAGE3;
+        this.enemyMaxNumber = 5;
+        this.mobEnemyWeight = 5;
+        this.eliteEnemyWeight = 3;
+        this.elitePlusEnemyWeight = 2;
     }
 }

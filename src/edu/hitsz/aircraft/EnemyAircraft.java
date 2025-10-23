@@ -24,10 +24,10 @@ public abstract class EnemyAircraft extends AbstractAircraft {
     }
 
     // 掉落各类道具的概率
-    private static final int HEALING_ITEM_WEIGHT = 300;
-    private static final int FIRE_POWER_UP_WEIGHT = 150;
-    private static final int BOMB_ITEM_WEIGHT = 50;
-    private static final int FIRE_POWER_UP_PLUS_WEIGHT = 100;
+    private static final int HEALING_ITEM_WEIGHT = 30;
+    private static final int FIRE_POWER_UP_WEIGHT = 30;
+    private static final int BOMB_ITEM_WEIGHT = 20;
+    private static final int FIRE_POWER_UP_PLUS_WEIGHT = 20;
 
     private static final int TOTAL_WEIGHT = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT
             + FIRE_POWER_UP_PLUS_WEIGHT;

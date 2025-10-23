@@ -8,7 +8,7 @@ public class BossEnemy extends EnemyAircraft {
     public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp,
                 0, 20, 5, new EnemyAircraftCircularShootStrategy(),
-                0.7, 3);
+                0.6, 3);
     }
 
     @Override

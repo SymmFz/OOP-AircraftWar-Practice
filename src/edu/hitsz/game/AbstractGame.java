@@ -8,6 +8,7 @@ import edu.hitsz.application.MusicManager;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
+import edu.hitsz.item.BombItem;
 import edu.hitsz.scorerecord.ScoreBoardService;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
@@ -334,6 +335,9 @@ public abstract class AbstractGame extends JPanel {
         // 我方获得道具，道具生效
         for (BaseItem item : items) {
             if (heroAircraft.crash(item)) {
+                if (item instanceof BombItem) {
+                    musicManager.playBombExplosionSoundEffect();
+                }
                 item.active(heroAircraft, enemyAircrafts, enemyBullets, this.executorService);
                 item.vanish();
 

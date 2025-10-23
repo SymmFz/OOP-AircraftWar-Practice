@@ -65,6 +65,14 @@ public class GameSettingsView {
                 Main.cardLayout.show(Main.cardPanel, Main.START_MENU_VIEW);
             }
         });
+
+        backGroundMusic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean isSelected = backGroundMusic.isSelected();
+                MusicManager.getInstance().setSoundEnabled(isSelected);
+            }
+        });
     }
 
     public JPanel getMainPanel() { return mainPanel; }

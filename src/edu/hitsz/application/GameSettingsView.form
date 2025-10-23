@@ -46,6 +46,7 @@
               <font size="20"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="11"/>
+              <selected value="true"/>
               <text value="背景音乐"/>
             </properties>
           </component>

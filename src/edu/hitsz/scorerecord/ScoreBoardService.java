@@ -71,17 +71,19 @@ public class ScoreBoardService {
     }
 
     public void printAllScoreRecord(GameDifficulty difficulty) {
+        int No = 1;
         for (ScoreRecord record : dao.getAllScoreRecords(difficulty)) {
-            System.out.println(record);
+            System.out.println(String.format("第 %d 名：", No) + record);
+            No++;
         }
     }
 
     public void printScoreBoardInConsole(GameDifficulty difficulty) {
         System.out.println("AbstractGame Over!");
-        System.out.println("难度：" + difficulty);
         System.out.println("===============================");
         System.out.println("           得分排行榜          ");
         System.out.println("===============================");
+        System.out.println("难度：" + difficulty);
         printAllScoreRecord(difficulty);
     }
 }

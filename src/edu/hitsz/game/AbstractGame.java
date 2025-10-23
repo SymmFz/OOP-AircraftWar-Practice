@@ -170,7 +170,18 @@ public abstract class AbstractGame extends JPanel {
                 gameOverFlag = true;
 
                 String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n请输入玩家名记录得分：", score));
-                scoreBoardService.addRecord(playerName, score, gameDifficulty);
+                if (playerName != null) {
+                    playerName = playerName.trim();
+                    if (playerName.isEmpty()) {
+                        playerName = "Anonymous";
+                    }
+                    System.out.println("玩家名：" + playerName);
+                    System.out.println("难度：" + gameDifficulty);
+                    System.out.println("得分：" + score);
+                    scoreBoardService.addRecord(playerName, score, gameDifficulty);
+                } else {
+                    System.out.println("玩家取消，本次游戏不记录分数。");
+                }
                 scoreBoardService.printScoreBoardInConsole(gameDifficulty);
                 Main.cardLayout.show(Main.cardPanel, Main.SCORE_BOARD_VIEW);
             }

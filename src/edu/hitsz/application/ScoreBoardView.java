@@ -18,6 +18,7 @@ public class ScoreBoardView {
     private JButton deleteButton;
     private JButton returnButton;
     private JLabel gameDifficultyField;
+    private JButton gameDifficultySwitchButton;
 
     public ScoreBoardView(ScoreBoardService scoreBoardService) {
 
@@ -56,6 +57,27 @@ public class ScoreBoardView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.cardLayout.show(Main.cardPanel, Main.START_MENU_VIEW);
+            }
+        });
+
+        gameDifficultySwitchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                GameDifficulty[] difficulties = GameDifficulty.values();
+
+                GameDifficulty selectedDifficulty = (GameDifficulty) JOptionPane.showInputDialog(
+                        mainPanel,
+                        "请选择要查看的排行榜难度：",
+                        "切换难度",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        difficulties,
+                        model.getGameDifficulty()
+                );
+
+                if (selectedDifficulty != null) {
+                    model.refreshData(selectedDifficulty);
+                }
             }
         });
     }

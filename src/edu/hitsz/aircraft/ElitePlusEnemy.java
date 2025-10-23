@@ -8,7 +8,7 @@ public class ElitePlusEnemy extends EnemyAircraft {
     public ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp,
                 1, 3, 5, new EnemyAircraftScatterShootStrategy(),
-                0.7, 1);
+                0.8, 1);
     }
 
     @Override

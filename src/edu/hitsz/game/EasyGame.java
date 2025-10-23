@@ -13,5 +13,9 @@ public class EasyGame extends AbstractGame {
     public void configureGame() {
         this.gameDifficulty = GameDifficulty.EASY;
         this.backgroundImage = ImageManager.BACKGROUND_IMAGE2;
+        this.enemyMaxNumber = 3;
+        this.mobEnemyWeight = 7;
+        this.eliteEnemyWeight = 3;
+        this.elitePlusEnemyWeight = 0;
     }
 }

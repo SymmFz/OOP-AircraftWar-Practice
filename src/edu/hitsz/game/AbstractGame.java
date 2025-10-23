@@ -52,12 +52,22 @@ public abstract class AbstractGame extends JPanel {
     /**
      * 屏幕中出现的敌机最大数量
      */
-    private int enemyMaxNumber = 5;
+    protected int enemyMaxNumber = 5;
 
     /**
-     * 下一个刷新的非 Boss 敌人为精英敌人的概率
+     * 普通敌机生成权重
      */
-    private final double ELITE_SPAWN_CHANCE = 0.2;
+    protected int mobEnemyWeight = 5;
+
+    /**
+     * 精英敌机生成权重
+     */
+    protected int eliteEnemyWeight = 3;
+
+    /**
+     * 超级精英敌机生成权重
+     */
+    protected int elitePlusEnemyWeight = 2;
 
     /**
      * 下一个 Boss 敌人出现所需的分数阈值
@@ -208,15 +218,14 @@ public abstract class AbstractGame extends JPanel {
 
                 musicManager.playBossBgm();
             } else {
-                boolean nextEnemyIsElite = Math.random() < ELITE_SPAWN_CHANCE;
-                if (nextEnemyIsElite) {
-                    if (Math.random() < 0.75) {
-                        enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
-                    } else {
-                        enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
-                    }
-                } else {
+                int totalWeight = mobEnemyWeight + eliteEnemyWeight + elitePlusEnemyWeight;
+                int randomNum = (int) (Math.random() * totalWeight);
+                if (randomNum < mobEnemyWeight) {
                     enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
+                } else if (randomNum < mobEnemyWeight + eliteEnemyWeight) {
+                    enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
+                } else {
+                    enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
                 }
             }
         }

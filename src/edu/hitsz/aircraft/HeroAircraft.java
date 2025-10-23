@@ -69,9 +69,6 @@ public class HeroAircraft extends AbstractAircraft {
     public void upgradeShootingStrategyForPeriod(ShootStrategy newStrategy,
                                                  int duration, TimeUnit unit,
                                                  ScheduledExecutorService executorService) {
-        if (newStrategy.getPowerLevel() < this.shootStrategy.getPowerLevel()) {
-            return;
-        }
         if (shootingStateTimer != null && !shootingStateTimer.isDone()) {
             shootingStateTimer.cancel(false);
         }

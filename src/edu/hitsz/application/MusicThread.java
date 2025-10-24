@@ -16,11 +16,11 @@ import javax.sound.sampled.DataLine.Info;
 
 public class MusicThread extends Thread {
 
-    private String filename;
+    private final String filename;
     private AudioFormat audioFormat;
     private byte[] samples;
 
-    private boolean loop;
+    private final boolean loop;
     private volatile boolean stop;
 
 
@@ -38,10 +38,8 @@ public class MusicThread extends Thread {
             audioFormat = stream.getFormat();
             samples = getSamples(stream);
         } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -53,7 +51,6 @@ public class MusicThread extends Thread {
         try {
             dataInputStream.readFully(samples);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return samples;
@@ -70,7 +67,6 @@ public class MusicThread extends Thread {
             dataLine = (SourceDataLine) AudioSystem.getLine(info);
             dataLine.open(audioFormat, size);
         } catch (LineUnavailableException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         dataLine.start();

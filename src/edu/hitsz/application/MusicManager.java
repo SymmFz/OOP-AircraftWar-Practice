@@ -1,7 +1,5 @@
 package edu.hitsz.application;
 
-import edu.hitsz.application.MusicThread;
-
 public class MusicManager {
 
     private static final String BGM_MUSIC_FILEPATH = "src/videos/bgm.wav";
@@ -28,7 +26,7 @@ public class MusicManager {
     public boolean isSoundEnabled() { return this.isSoundEnabled; }
 
     // start restart or switch bgm
-    public synchronized void playBgm(String bgmFilePath) {
+    public synchronized void switchBgm(String bgmFilePath) {
         if (!isSoundEnabled) {
             return;
         }
@@ -53,12 +51,12 @@ public class MusicManager {
     }
 
     // play Pre-defined music or sound
-    public void playDefaultBgm() {
-        playBgm(BGM_MUSIC_FILEPATH);
+    public void switchToDefaultBgm() {
+        switchBgm(BGM_MUSIC_FILEPATH);
     }
 
-    public void playBossBgm() {
-        playBgm(BGM_BOSS_MUSIC_FILEPATH);
+    public void switchToBossBgm() {
+        switchBgm(BGM_BOSS_MUSIC_FILEPATH);
     }
 
     public void playBombExplosionSoundEffect() {

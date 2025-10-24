@@ -3,10 +3,8 @@ package edu.hitsz.item;
 import edu.hitsz.aircraft.EnemyAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.bullet.BaseBullet;
-import edu.hitsz.shootstrategy.HeroAircraftDirectShootStrategy;
 import edu.hitsz.shootstrategy.HeroAircraftScatterShootStrategy;
 
-import java.sql.Time;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

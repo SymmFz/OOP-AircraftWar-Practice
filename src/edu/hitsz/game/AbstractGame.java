@@ -36,7 +36,7 @@ public abstract class AbstractGame extends JPanel {
     /**
      * 时间间隔(ms)，控制刷新频率
      */
-    private int timeInterval = 40;
+    private final int timeInterval = 40;
 
     private final HeroAircraft heroAircraft;
     private final List<EnemyAircraft> enemyAircrafts;
@@ -95,7 +95,7 @@ public abstract class AbstractGame extends JPanel {
      * 周期（ms)
      * 指示子弹的发射、敌机的产生频率
      */
-    private int cycleDuration = 600;
+    private final int cycleDuration = 600;
     private int cycleTime = 0;
 
     /**
@@ -138,7 +138,7 @@ public abstract class AbstractGame extends JPanel {
      */
     public void action() {
 
-        musicManager.playDefaultBgm();
+        musicManager.switchToDefaultBgm();
 
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
         Runnable task = () -> {
@@ -217,7 +217,7 @@ public abstract class AbstractGame extends JPanel {
                 bossScoreThreshold += BOSS_SCORE_INTERVAL;
                 bossExists = true;
 
-                musicManager.playBossBgm();
+                musicManager.switchToBossBgm();
             } else {
                 int totalWeight = mobEnemyWeight + eliteEnemyWeight + elitePlusEnemyWeight;
                 int randomNum = (int) (Math.random() * totalWeight);
@@ -315,7 +315,7 @@ public abstract class AbstractGame extends JPanel {
                         score += enemyAircraft.getScoreNum();
                         if (enemyAircraft instanceof BossEnemy) {
                             bossExists = false;
-                            musicManager.playDefaultBgm();
+                            musicManager.switchToDefaultBgm();
                         }
                     }
 

@@ -30,4 +30,9 @@ public class MobEnemy extends EnemyAircraft {
     public int getScoreNum() {
         return 100;
     }
+
+    @Override
+    public void updateOnBombExplosion() {
+        this.vanish();
+    }
 }

@@ -34,6 +34,5 @@ public abstract class BaseItem extends AbstractFlyingObject {
     }
 
     // TODO: use a GameContext Class instead of many arguments
-    public abstract void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets,
-                                ScheduledExecutorService executorService);
+    public abstract void active(HeroAircraft heroAircraft, ScheduledExecutorService executorService);
 }

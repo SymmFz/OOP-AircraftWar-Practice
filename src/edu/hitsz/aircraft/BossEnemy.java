@@ -24,4 +24,8 @@ public class BossEnemy extends EnemyAircraft {
     public int getScoreNum() {
         return 1500;
     }
+
+    @Override
+    public void updateOnBombExplosion() { return; }
+
 }

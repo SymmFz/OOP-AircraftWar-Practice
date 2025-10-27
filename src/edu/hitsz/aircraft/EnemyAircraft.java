@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * 所有敌机的父类
  */
-public abstract class EnemyAircraft extends AbstractAircraft {
+public abstract class EnemyAircraft extends AbstractAircraft implements BombObserver {
 
     protected double itemDropChance;
     protected int maxItemNum;
@@ -60,5 +60,7 @@ public abstract class EnemyAircraft extends AbstractAircraft {
     }
 
     public abstract int getScoreNum();
+
+    public abstract void updateOnBombExplosion();
 
 }

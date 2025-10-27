@@ -20,8 +20,7 @@ public class HealingItem extends BaseItem {
 
     // TODO: use a GameContext Class instead of many arguments
     @Override
-    public void active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets,
-                       ScheduledExecutorService executorService) {
+    public void active(HeroAircraft heroAircraft, ScheduledExecutorService executorService) {
         heroAircraft.increaseHp(HEALING_AMOUNT);
         System.out.println("Healing Item active: healing " + HEALING_AMOUNT);
     }

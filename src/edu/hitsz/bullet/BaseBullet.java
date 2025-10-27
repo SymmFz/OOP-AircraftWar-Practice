@@ -2,6 +2,7 @@ package edu.hitsz.bullet;
 
 import edu.hitsz.application.Main;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.item.BombObserver;
 
 /**
  * 子弹类。
@@ -9,7 +10,7 @@ import edu.hitsz.basic.AbstractFlyingObject;
  *
  * @author hitsz
  */
-public abstract class BaseBullet extends AbstractFlyingObject {
+public abstract class BaseBullet extends AbstractFlyingObject implements BombObserver {
 
     private int power = 10;
 
@@ -39,5 +40,10 @@ public abstract class BaseBullet extends AbstractFlyingObject {
 
     public int getPower() {
         return power;
+    }
+
+    @Override
+    public void updateOnBombExplosion() {
+        this.vanish();
     }
 }

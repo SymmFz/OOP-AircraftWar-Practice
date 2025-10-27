@@ -24,4 +24,9 @@ public class ElitePlusEnemy extends EnemyAircraft {
     public int getScoreNum() {
         return 500;
     }
+
+    @Override
+    public void updateOnBombExplosion() {
+        this.decreaseHp((int) (this.maxHp * 0.5));
+    }
 }

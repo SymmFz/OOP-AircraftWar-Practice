@@ -24,4 +24,9 @@ public class EliteEnemy extends EnemyAircraft {
     public int getScoreNum() {
         return 300;
     }
+
+    @Override
+    public void updateOnBombExplosion() {
+        this.vanish();
+    }
 }

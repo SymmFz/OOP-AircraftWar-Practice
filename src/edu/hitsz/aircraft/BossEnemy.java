@@ -2,13 +2,16 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.application.Main;
 import edu.hitsz.shootstrategy.EnemyAircraftCircularShootStrategy;
+import edu.hitsz.shootstrategy.ShootStrategy;
 
 public class BossEnemy extends EnemyAircraft {
 
-    public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
+    public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp,
+        int direction, int shootNum, int power, ShootStrategy shootStrategy,
+        double itemDropChance, int maxItemNum) {
         super(locationX, locationY, speedX, speedY, hp,
-                0, 20, 5, new EnemyAircraftCircularShootStrategy(),
-                0.6, 3);
+                direction, shootNum, power, shootStrategy,
+                itemDropChance, maxItemNum);
     }
 
     @Override

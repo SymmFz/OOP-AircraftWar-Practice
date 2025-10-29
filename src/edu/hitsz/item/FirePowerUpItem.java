@@ -3,7 +3,7 @@ package edu.hitsz.item;
 import edu.hitsz.aircraft.EnemyAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.bullet.BaseBullet;
-import edu.hitsz.shootstrategy.HeroAircraftScatterShootStrategy;
+import edu.hitsz.shootstrategy.HeroAircraftFanShootStrategy;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class FirePowerUpItem extends BaseItem {
 
-    private static final int DURATION_SECONDS = 10;
+    private static final int DURATION_SECONDS = 15;
 
     public FirePowerUpItem(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
@@ -26,7 +26,7 @@ public class FirePowerUpItem extends BaseItem {
         System.out.println("FireSupply active!");
 
         heroAircraft.upgradeShootingStrategyForPeriod(
-                new HeroAircraftScatterShootStrategy(),
+                new HeroAircraftFanShootStrategy(),
                 DURATION_SECONDS,
                 TimeUnit.SECONDS,
                 executorService

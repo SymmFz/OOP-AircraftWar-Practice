@@ -9,7 +9,6 @@ import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
 import edu.hitsz.item.BombItem;
-import edu.hitsz.item.BombObserver;
 import edu.hitsz.scorerecord.ScoreBoardService;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
@@ -47,50 +46,38 @@ public abstract class AbstractGame extends JPanel {
 
     protected GameDifficulty gameDifficulty;
     protected ScoreBoardService scoreBoardService;
-
     protected MusicManager musicManager;
     protected BufferedImage backgroundImage = ImageManager.BACKGROUND_IMAGE;
 
-    /**
-     * 屏幕中出现的敌机最大数量
-     */
-    protected int enemyMaxNumber = 5;
+    // 游戏对象基础属性
+    protected int baseEnemyMaxNumber;
+    protected int baseMobEnemyWeight;
+    protected int baseEliteEnemyWeight;
+    protected int baseElitePlusEnemyWeight;
+    protected int baseBossScoreInterval;
 
-    /**
-     * 普通敌机生成权重
-     */
-    protected int mobEnemyWeight = 5;
+    private double currentEnemyHpRate = 1.0;
+    private double currentEnemyPowerRate = 1.0;
+    private double currentBossHpRate = 1.0;
+    private double currentBossPowerRate = 1.0;
+    private int currentEnemyMaxNumber;
+    protected int bossScoreThreshold;
+    protected int currentBossScoreInterval;
 
-    /**
-     * 精英敌机生成权重
-     */
-    protected int eliteEnemyWeight = 3;
+    private int currentMobEnemyWeight;
+    private int currentEliteEnemyWeight;
+    private int currentElitePlusEnemyWeight;
 
-    /**
-     * 超级精英敌机生成权重
-     */
-    protected int elitePlusEnemyWeight = 2;
-
-    /**
-     * 下一个 Boss 敌人出现所需的分数阈值
-     */
-    private final int BOSS_SCORE_INTERVAL = 5000;
-    private int bossScoreThreshold = BOSS_SCORE_INTERVAL;
+    protected int bossKilledNum = 0;
     private boolean bossExists = false;
 
-    private final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
-    private final EnemyAircraftFactory eliteEnemyFactory = new EliteEnemyFactory();
-    private final EnemyAircraftFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
-    private final EnemyAircraftFactory bossEnemyFactory = new BossEnemyFactory();
+    protected final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
+    protected final EnemyAircraftFactory eliteEnemyFactory = new EliteEnemyFactory();
+    protected final EnemyAircraftFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
+    protected final EnemyAircraftFactory bossEnemyFactory = new BossEnemyFactory();
 
-    /**
-     * 当前得分
-     */
-    private int score = 0;
-    /**
-     * 当前时刻
-     */
-    private int time = 0;
+    protected int score = 0;
+    protected int time = 0;
 
     /**
      * 周期（ms)
@@ -107,7 +94,6 @@ public abstract class AbstractGame extends JPanel {
     public AbstractGame(ScoreBoardService scoreBoardService) {
         HeroAircraft.resetInstance();
         heroAircraft = HeroAircraft.getInstance();
-
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
@@ -117,6 +103,15 @@ public abstract class AbstractGame extends JPanel {
         this.musicManager = MusicManager.getInstance();
 
         configureGame();
+
+        this.bossScoreThreshold = this.baseBossScoreInterval;
+        this.currentBossScoreInterval = this.baseBossScoreInterval;
+        this.currentEnemyMaxNumber = this.baseEnemyMaxNumber;
+        this.currentMobEnemyWeight = this.baseMobEnemyWeight;
+        this.currentEliteEnemyWeight = this.baseEliteEnemyWeight;
+        this.currentElitePlusEnemyWeight = this.baseElitePlusEnemyWeight;
+
+        configureFactories();
 
         /**
          * Scheduled 线程池，用于定时任务调度
@@ -132,7 +127,93 @@ public abstract class AbstractGame extends JPanel {
     }
 
     public abstract void configureGame();
-    public GameDifficulty getGameDifficulty() { return this.gameDifficulty; }
+
+    protected abstract double calculateEnemyHpRate(int time);
+
+    protected abstract double calculateEnemyPowerRate(int time);
+
+    protected abstract double calculateBossHpRate(int bossKilledNum);
+
+    protected abstract double calculateBossPowerRate(int bossKilledNum);
+
+    protected abstract int calculateEnemyMaxNumber(int baseMaxNumber, int score);
+
+    protected abstract int calculateEliteEnemyWeight(int baseWeight, int time);
+
+    protected abstract int calculateElitePlusEnemyWeight(int baseWeight, int time);
+
+    protected int calculateBossScoreInterval(int baseInterval, int bossKilledNum) {
+        // 默认情况下，Boss出现间隔不变
+        return baseInterval;
+    }
+
+    private void configureFactories() {
+        mobEnemyFactory.setPropertyHp(this.currentEnemyHpRate);
+        mobEnemyFactory.setPropertyPower(this.currentEnemyPowerRate);
+
+        eliteEnemyFactory.setPropertyHp(this.currentEnemyHpRate);
+        eliteEnemyFactory.setPropertyPower(this.currentEnemyPowerRate);
+
+        elitePlusEnemyFactory.setPropertyHp(this.currentEnemyHpRate);
+        elitePlusEnemyFactory.setPropertyPower(this.currentEnemyPowerRate);
+
+        bossEnemyFactory.setPropertyHp(this.currentBossHpRate);
+        bossEnemyFactory.setPropertyPower(this.currentBossPowerRate);
+    }
+
+    public void updateGameProperty() {
+        double newEnemyHpRate = calculateEnemyHpRate(time);
+        double newEnemyPowerRate = calculateEnemyPowerRate(time);
+        double newBossHpRate = calculateBossHpRate(bossKilledNum);
+        double newBossPowerRate = calculateBossPowerRate(bossKilledNum);
+        int newEnemyMaxNumber = calculateEnemyMaxNumber(this.baseEnemyMaxNumber, score);
+        int newEliteWeight = calculateEliteEnemyWeight(this.baseEliteEnemyWeight, time);
+        int newElitePlusWeight = calculateElitePlusEnemyWeight(this.baseElitePlusEnemyWeight, time);
+        int newBossScoreInterval = calculateBossScoreInterval(this.baseBossScoreInterval, bossKilledNum);
+
+        if (newEnemyHpRate > this.currentEnemyHpRate ||
+                newEnemyPowerRate > this.currentEnemyPowerRate ||
+                newEnemyMaxNumber > this.currentEnemyMaxNumber ||
+                newEliteWeight > this.currentEliteEnemyWeight ||
+                newElitePlusWeight > this.currentElitePlusEnemyWeight ||
+                newBossHpRate > this.currentBossHpRate ||
+                newBossPowerRate > this.currentBossPowerRate ||
+                newBossScoreInterval != this.currentBossScoreInterval) {
+
+            this.currentEnemyHpRate = newEnemyHpRate;
+            this.currentEnemyPowerRate = newEnemyPowerRate;
+            this.currentBossHpRate = newBossHpRate;
+            this.currentBossPowerRate = newBossPowerRate;
+            this.currentEnemyMaxNumber = newEnemyMaxNumber;
+            this.currentEliteEnemyWeight = newEliteWeight;
+            this.currentElitePlusEnemyWeight = newElitePlusWeight;
+            this.currentBossScoreInterval = newBossScoreInterval;
+
+            System.out.println("-------------------------------------------------------");
+            System.out.println("Time: " + time + " | Score: " + score);
+            System.out.println("提高难度！");
+            System.out.printf("1. 敌机生命值倍率：%.2f, 敌机伤害倍率：%.2f%n",
+                    this.currentEnemyHpRate, this.currentEnemyPowerRate);
+
+            int totalWeight = this.currentMobEnemyWeight + this.currentEliteEnemyWeight
+                    + this.currentElitePlusEnemyWeight;
+            System.out.printf("2. 精英敌机出现概率：%.2f，超级精英敌机出现概率：%.2f%n",
+                    (double) this.currentEliteEnemyWeight / totalWeight,
+                    (double) this.currentElitePlusEnemyWeight / totalWeight);
+
+            System.out.printf("3. 敌机最大数量：%d%n", this.currentEnemyMaxNumber);
+            System.out.printf("4. Boss 敌机下次产生阈值：%d, 后续产生间隔: %d%n", this.bossScoreThreshold, this.currentBossScoreInterval);
+            System.out.printf("5. Boss 敌机生命值倍率：%.2f, Boss 敌机伤害倍率：%.2f%n",
+                    this.currentBossHpRate, this.currentBossPowerRate);
+            System.out.println("-------------------------------------------------------");
+
+            configureFactories();
+        }
+    }
+
+    public GameDifficulty getGameDifficulty() {
+        return this.gameDifficulty;
+    }
 
     /**
      * 游戏启动入口，执行游戏逻辑
@@ -149,6 +230,8 @@ public abstract class AbstractGame extends JPanel {
             // 周期性执行（控制频率）
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
+                updateGameProperty();
+
                 // 新敌机产生
                 generateEnemyAircraftAction();
                 // 飞机射出子弹
@@ -178,10 +261,24 @@ public abstract class AbstractGame extends JPanel {
                 // 游戏结束
                 musicManager.stopBgm();
                 musicManager.playGameOverSoundEffect();
-                executorService.shutdown();
                 gameOverFlag = true;
 
                 String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n请输入玩家名记录得分：", score));
+
+                if ("woshiqingshihuang".equals(playerName) ||
+                    "wsqsh".equals(playerName)) {
+                    System.out.println("作弊码激活！我是秦始皇！再来一次！");
+                    JOptionPane.showMessageDialog(this, "作弊码激活！我是秦始皇！再来一次！");
+                    heroAircraft.increaseHp(Integer.MAX_VALUE);
+                    enemyAircrafts.clear();
+                    enemyBullets.clear();
+                    gameOverFlag = false;
+                    musicManager.switchToDefaultBgm();
+                    return;
+                }
+
+                executorService.shutdown();
+
                 if (playerName != null) {
                     playerName = playerName.trim();
                     if (playerName.isEmpty()) {
@@ -212,19 +309,19 @@ public abstract class AbstractGame extends JPanel {
     // ***********************
 
     private void generateEnemyAircraftAction() {
-        if (enemyAircrafts.size() < enemyMaxNumber) {
+        if (enemyAircrafts.size() < currentEnemyMaxNumber) {
             if (score >= bossScoreThreshold && !bossExists) {
                 enemyAircrafts.add(bossEnemyFactory.createEnemyAircraft());
-                bossScoreThreshold += BOSS_SCORE_INTERVAL;
+                bossScoreThreshold += currentBossScoreInterval;
                 bossExists = true;
 
                 musicManager.switchToBossBgm();
             } else {
-                int totalWeight = mobEnemyWeight + eliteEnemyWeight + elitePlusEnemyWeight;
+                int totalWeight = currentMobEnemyWeight + currentEliteEnemyWeight + currentElitePlusEnemyWeight;
                 int randomNum = (int) (Math.random() * totalWeight);
-                if (randomNum < mobEnemyWeight) {
+                if (randomNum < currentMobEnemyWeight) {
                     enemyAircrafts.add(mobEnemyFactory.createEnemyAircraft());
-                } else if (randomNum < mobEnemyWeight + eliteEnemyWeight) {
+                } else if (randomNum < currentMobEnemyWeight + currentEliteEnemyWeight) {
                     enemyAircrafts.add(eliteEnemyFactory.createEnemyAircraft());
                 } else {
                     enemyAircrafts.add(elitePlusEnemyFactory.createEnemyAircraft());
@@ -316,6 +413,7 @@ public abstract class AbstractGame extends JPanel {
                         score += enemyAircraft.getScoreNum();
                         if (enemyAircraft instanceof BossEnemy) {
                             bossExists = false;
+                            bossKilledNum++;
                             musicManager.switchToDefaultBgm();
                         }
                     }

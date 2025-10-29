@@ -33,3 +33,5 @@ ranklist_db
 hs_err_pid*
 
 scores.json
+
+*.wav

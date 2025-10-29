@@ -7,7 +7,7 @@ import edu.hitsz.shootstrategy.EnemyAircraftCircularShootStrategy;
 public class BossEnemyFactory extends EnemyAircraftFactory {
 
     public BossEnemyFactory() {
-        this.baseHp = 300;
+        this.baseHp = 1000;
         this.baseSpeedY = 0;
         this.basePower = 5;
         this.baseShootNum = 20;

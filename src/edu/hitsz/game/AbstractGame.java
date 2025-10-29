@@ -83,7 +83,7 @@ public abstract class AbstractGame extends JPanel {
      * 周期（ms)
      * 指示子弹的发射、敌机的产生频率
      */
-    private final int cycleDuration = 600;
+    private final int cycleDuration = 800;
     private int cycleTime = 0;
 
     /**

@@ -2,16 +2,21 @@ package edu.hitsz.application;
 
 public class MusicManager {
 
-    private static final String BGM_MUSIC_FILEPATH = "src/videos/bgm.wav";
-    private static final String BGM_BOSS_MUSIC_FILEPATH = "src/videos/bgm_boss.wav";
+    private String bgmMusicFilepath = "src/videos/Vektor - Black Future.wav";
+    private static final String BGM_BOSS_MUSIC_FILEPATH = "src/videos/Norther - Midnight Walker.wav";
     private static final String BOMB_EXPLOSION_SOUND_FILEPATH = "src/videos/bomb_explosion.wav";
     private static final String BULLET_HIT_SOUND_FILEPATH = "src/videos/bullet_hit.wav";
     private static final String GET_SUPPLY_SOUND_FILEPATH = "src/videos/get_supply.wav";
     private static final String GAME_OVER_SOUND_FILEPATH = "src/videos/game_over.wav";
 
-    private static  final MusicManager instance = new MusicManager();
-    private MusicManager() {}
-    public static MusicManager getInstance() { return instance; }
+    private static final MusicManager instance = new MusicManager();
+
+    private MusicManager() {
+    }
+
+    public static MusicManager getInstance() {
+        return instance;
+    }
 
     private MusicThread bgmMusicThread;
     private boolean isSoundEnabled = true;
@@ -23,7 +28,9 @@ public class MusicManager {
         }
     }
 
-    public boolean isSoundEnabled() { return this.isSoundEnabled; }
+    public boolean isSoundEnabled() {
+        return this.isSoundEnabled;
+    }
 
     // start restart or switch bgm
     public synchronized void switchBgm(String bgmFilePath) {
@@ -50,9 +57,13 @@ public class MusicManager {
         new MusicThread(soundFilePath, false).start();
     }
 
+    public void changeDefaultBgmFile(String newBgmFilepath) {
+        this.bgmMusicFilepath = newBgmFilepath;
+    }
+
     // play Pre-defined music or sound
     public void switchToDefaultBgm() {
-        switchBgm(BGM_MUSIC_FILEPATH);
+        switchBgm(bgmMusicFilepath);
     }
 
     public void switchToBossBgm() {

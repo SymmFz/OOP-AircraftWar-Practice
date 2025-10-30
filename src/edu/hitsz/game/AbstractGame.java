@@ -83,7 +83,7 @@ public abstract class AbstractGame extends JPanel {
      * 周期（ms)
      * 指示子弹的发射、敌机的产生频率
      */
-    private final int cycleDuration = 800;
+    private final int cycleDuration = 850;
     private int cycleTime = 0;
 
     /**
@@ -266,7 +266,8 @@ public abstract class AbstractGame extends JPanel {
                 String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n请输入玩家名记录得分：", score));
 
                 if ("woshiqingshihuang".equals(playerName) ||
-                    "wsqsh".equals(playerName)) {
+                    "wsqsh".equals(playerName) ||
+                    "我是秦始皇".equals(playerName)) {
                     System.out.println("作弊码激活！我是秦始皇！再来一次！");
                     JOptionPane.showMessageDialog(this, "作弊码激活！我是秦始皇！再来一次！");
                     heroAircraft.increaseHp(Integer.MAX_VALUE);
@@ -388,6 +389,10 @@ public abstract class AbstractGame extends JPanel {
             if (heroAircraft.crash(bullet)) {
                 heroAircraft.decreaseHp(bullet.getPower());
                 bullet.vanish();
+
+                if (heroAircraft.getHp() <= 30) {
+                    musicManager.playGameOverSoundEffect();
+                }
             }
         }
 
@@ -501,6 +506,12 @@ public abstract class AbstractGame extends JPanel {
         // 绘制得分和生命值
         paintScoreAndLife(g);
 
+        // 绘制游戏 logo
+        if (heroAircraft.getHp() > 30) {
+            g.drawImage(ImageManager.SMALL_LOGO_IMAGE, 0, 0, 60, 60, null);
+        } else {
+            g.drawImage(ImageManager.SMALL_LOGO_RED_IMAGE, 0, 0, 60, 60, null);
+        }
     }
 
     private void paintImageWithPositionRevised(Graphics g, List<? extends AbstractFlyingObject> objects) {
@@ -517,9 +528,13 @@ public abstract class AbstractGame extends JPanel {
     }
 
     private void paintScoreAndLife(Graphics g) {
-        int x = 10;
-        int y = 25;
-        g.setColor(new Color(16711680));
+        int x = 70;
+        int y = 30;
+        if (heroAircraft.getHp() > 30) {
+            g.setColor(Color.CYAN);
+        } else {
+            g.setColor(new Color(16711680));
+        }
         g.setFont(new Font("SansSerif", Font.BOLD, 22));
         g.drawString("SCORE:" + this.score, x, y);
         y = y + 20;

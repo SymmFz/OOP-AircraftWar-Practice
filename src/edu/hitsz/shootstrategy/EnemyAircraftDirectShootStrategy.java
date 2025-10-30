@@ -18,7 +18,7 @@ public class EnemyAircraftDirectShootStrategy implements ShootStrategy{
     public List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
                                   int direction, int shootNum, int power) {
         List<BaseBullet> res = new LinkedList<>();
-        int baseSpeedY = 5;
+        int baseSpeedY = 4;
         int x = aircraftLocationX;
         int y = aircraftLocationY + direction * 2;
         int speedX = 0;

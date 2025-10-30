@@ -17,7 +17,7 @@ public class HardGame extends AbstractGame {
         this.baseMobEnemyWeight = 5;
         this.baseEliteEnemyWeight = 3;
         this.baseElitePlusEnemyWeight = 2;
-        this.baseBossScoreInterval = 6000;
+        this.baseBossScoreInterval = 12000;
     }
 
     @Override
@@ -64,8 +64,8 @@ public class HardGame extends AbstractGame {
 
     @Override
     protected int calculateBossScoreInterval(int baseInterval, int bossKilledNum) {
-        // 每击杀一个Boss，后续Boss出现的间隔增加2000，上限为16000
-        return Math.min(16000, baseInterval + bossKilledNum * 1000);
+        // 每击杀一个Boss，后续Boss出现的间隔增加4000，上限为80000
+        return Math.min(80000, baseInterval + bossKilledNum * 4000);
     }
 }
 

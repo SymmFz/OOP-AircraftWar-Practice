@@ -2,6 +2,7 @@ package edu.hitsz.shootstrategy;
 
 import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.bullet.BaseBullet;
+import edu.hitsz.bullet.GoldBullet;
 import edu.hitsz.bullet.HeroBullet;
 
 import java.util.LinkedList;
@@ -31,7 +32,7 @@ public class HeroAircraftCircularShootStrategy implements ShootStrategy {
             y = aircraftLocationY + (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * locationVectorLen);
             speedX = aircraftSpeedX + (int) (Math.sin(Math.toRadians(bulletCurrentAngel)) * baseSpeed);
             speedY = aircraftSpeedY + (int) (Math.cos(Math.toRadians(bulletCurrentAngel)) * baseSpeed);
-            bullet = new HeroBullet(x, y, speedX, speedY, power);
+            bullet = new GoldBullet(x, y, speedX, speedY, power);
             res.add(bullet);
         }
         return res;

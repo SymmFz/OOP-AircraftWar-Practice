@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class FirePowerUpPlusItem extends BaseItem {
 
-    private static final int DURATION_SECONDS = 16;
+    private static final int DURATION_SECONDS = 10;
 
     public FirePowerUpPlusItem(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);

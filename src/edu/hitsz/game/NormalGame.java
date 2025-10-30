@@ -17,7 +17,7 @@ public class NormalGame extends AbstractGame {
         this.baseMobEnemyWeight = 6;
         this.baseEliteEnemyWeight = 3;
         this.baseElitePlusEnemyWeight = 1;
-        this.baseBossScoreInterval = 8000;
+        this.baseBossScoreInterval = 18000;
     }
 
     @Override

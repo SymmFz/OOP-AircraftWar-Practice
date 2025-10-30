@@ -24,6 +24,6 @@ public class EliteEnemyFactory extends EnemyAircraftFactory {
                 speedY,
                 hp,
                 1, shootNum, power, new EnemyAircraftDirectShootStrategy(),
-                0.4, 1);
+                0.6, 1);
     }
 }

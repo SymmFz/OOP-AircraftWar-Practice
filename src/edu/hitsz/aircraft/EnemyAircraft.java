@@ -24,13 +24,14 @@ public abstract class EnemyAircraft extends AbstractAircraft implements BombObse
     }
 
     // 掉落各类道具的概率
-    private static final int HEALING_ITEM_WEIGHT = 30;
-    private static final int FIRE_POWER_UP_WEIGHT = 30;
+    private static final int HEALING_ITEM_WEIGHT = 60;
+    private static final int FIRE_POWER_UP_WEIGHT = 50;
     private static final int BOMB_ITEM_WEIGHT = 20;
-    private static final int FIRE_POWER_UP_PLUS_WEIGHT = 20;
+    private static final int FIRE_POWER_UP_PLUS_WEIGHT = 30;
+    private static final int DARTS_ITEM_WEIGHT = 30;
 
     private static final int TOTAL_WEIGHT = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT
-            + FIRE_POWER_UP_PLUS_WEIGHT;
+            + FIRE_POWER_UP_PLUS_WEIGHT + DARTS_ITEM_WEIGHT;
 
     private static final Random RANDOM_INSTANCE = new Random();
 
@@ -49,8 +50,10 @@ public abstract class EnemyAircraft extends AbstractAircraft implements BombObse
                     itemFactory = new FirePowerUpItemFactory();
                 } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT) {
                     itemFactory = new FirePowerUpPlusItemFactory();
-                } else {
+                } else if (roll < HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT + BOMB_ITEM_WEIGHT) {
                     itemFactory = new BombItemFactory();
+                } else {
+                    itemFactory = new DartsItemFactory();
                 }
 
                 res.add(itemFactory.createItem(this.locationX + (i * 2 - this.maxItemNum + 1) * 10, this.locationY));

@@ -9,11 +9,15 @@ import edu.hitsz.bullet.*;
 import edu.hitsz.item.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 综合管理图片的加载，访问
@@ -56,6 +60,7 @@ public class ImageManager {
     public static BufferedImage LOGO_IMAGE;
     public static BufferedImage GAME_BG_IMAGE;
 
+    public static ImageIcon BACKGROUND_GIF;
     static {
         try {
 
@@ -86,6 +91,8 @@ public class ImageManager {
             SMALL_LOGO_RED_IMAGE = ImageIO.read(new FileInputStream("src/images/small_logo_red.png"));
             LOGO_IMAGE = ImageIO.read(new FileInputStream("src/images/big_logo.png"));
             GAME_BG_IMAGE = ImageIO.read(new FileInputStream("src/images/gamebg.png"));
+            String gifPath = "src/images/game-video.gif";
+            BACKGROUND_GIF = new ImageIcon(gifPath);
 
             CLASSNAME_IMAGE_MAP.put(HeroAircraft.class.getName(), HERO_IMAGE);
             CLASSNAME_IMAGE_MAP.put(MobEnemy.class.getName(), MOB_ENEMY_IMAGE);

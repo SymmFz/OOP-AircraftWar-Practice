@@ -25,6 +25,7 @@ public class Main {
     public static final String GAME_SETTINGS_VIEW = "gameSettingsView";
     public static final String SCORE_BOARD_VIEW = "scoreBoardView";
     public static final String GAME_VIEW = "gameView";
+    public static final String STORY_VIEW = "storyView";
 
     public static AbstractGame game;
 

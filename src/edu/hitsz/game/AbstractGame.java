@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 游戏主面板，游戏启动
@@ -70,6 +71,11 @@ public abstract class AbstractGame extends JPanel {
 
     protected int bossKilledNum = 0;
     private boolean bossExists = false;
+
+    private int heroLastHp = 100;
+
+    private volatile boolean storyMode = false;
+    private final List<GameEventListener> gameEventListeners = new CopyOnWriteArrayList<>();
 
     protected final EnemyAircraftFactory mobEnemyFactory = new MobEnemyFactory();
     protected final EnemyAircraftFactory eliteEnemyFactory = new EliteEnemyFactory();
@@ -215,6 +221,53 @@ public abstract class AbstractGame extends JPanel {
         return this.gameDifficulty;
     }
 
+    public void setStoryMode(boolean storyMode) {
+        this.storyMode = storyMode;
+    }
+
+    public boolean isStoryMode() {
+        return storyMode;
+    }
+
+    public void addGameEventListener(GameEventListener listener) {
+        if (listener != null) {
+            gameEventListeners.add(listener);
+        }
+    }
+
+    public void removeGameEventListener(GameEventListener listener) {
+        if (listener != null) {
+            gameEventListeners.remove(listener);
+        }
+    }
+
+    protected void notifyGameOverEvent(boolean heroDied) {
+        for (GameEventListener listener : gameEventListeners) {
+            try {
+                listener.onGameOver(this, heroDied, this.score);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void notifyBossKilledEvent() {
+        for (GameEventListener listener : gameEventListeners) {
+            try {
+                listener.onBossKilled(this, this.bossKilledNum, this.score);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void stopGame() {
+        gameOverFlag = true;
+        if (!executorService.isShutdown()) {
+            executorService.shutdownNow();
+        }
+    }
+
     /**
      * 游戏启动入口，执行游戏逻辑
      */
@@ -231,6 +284,8 @@ public abstract class AbstractGame extends JPanel {
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
                 updateGameProperty();
+
+                maybePlayFailureSuccessVoice();
 
                 // 新敌机产生
                 generateEnemyAircraftAction();
@@ -262,6 +317,14 @@ public abstract class AbstractGame extends JPanel {
                 musicManager.stopBgm();
                 musicManager.playGameOverSoundEffect();
                 gameOverFlag = true;
+
+                notifyGameOverEvent(true);
+
+                if (storyMode) {
+                    executorService.shutdown();
+                    SwingUtilities.invokeLater(() -> Main.cardLayout.show(Main.cardPanel, Main.SCORE_BOARD_VIEW));
+                    return;
+                }
 
                 String playerName = JOptionPane.showInputDialog(String.format("游戏结束，你的得分为 %d \n请输入玩家名记录得分：", score));
 
@@ -308,6 +371,23 @@ public abstract class AbstractGame extends JPanel {
     // ***********************
     // Action 各部分
     // ***********************
+
+    private void maybePlayFailureSuccessVoice() {
+        if (heroLastHp != heroAircraft.getHp() && heroLastHp > 30 && heroAircraft.getHp() < 30) {
+            musicManager.playRandomFailureVoice();
+        } else {
+            if (heroAircraft.getHp() <= 30) {
+                if (Math.random() < 0.04) {
+                    musicManager.playRandomFailureVoice();
+                }
+            } else {
+                if (Math.random() < 0.02) {
+                    musicManager.playRandomSuccessVoice();
+                }
+            }
+        }
+        heroLastHp = heroAircraft.getHp();
+    }
 
     private void generateEnemyAircraftAction() {
         if (enemyAircrafts.size() < currentEnemyMaxNumber) {
@@ -419,7 +499,9 @@ public abstract class AbstractGame extends JPanel {
                         if (enemyAircraft instanceof BossEnemy) {
                             bossExists = false;
                             bossKilledNum++;
+                            musicManager.playRandomSuccessVoice();
                             musicManager.switchToDefaultBgm();
+                            notifyBossKilledEvent();
                         }
                     }
 

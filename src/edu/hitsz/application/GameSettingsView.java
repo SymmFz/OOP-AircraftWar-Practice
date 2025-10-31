@@ -18,8 +18,10 @@ public class GameSettingsView {
     private JPanel easyButtonPanel;
     private JPanel normalButtonPanel;
     private JPanel hardButtonPanel;
+    private JPanel storyButtonPanel;
     private JButton returnButton;
     private JComboBox bgmComboBox;
+    private JButton storyModeButton;
 
     public GameSettingsView(ScoreBoardService scoreBoardService) {
         String[] bgmOptions = {
@@ -72,6 +74,13 @@ public class GameSettingsView {
                 Main.cardPanel.add(Main.game, Main.GAME_VIEW);
                 Main.cardLayout.show(Main.cardPanel, Main.GAME_VIEW);
                 Main.game.action();
+            }
+        });
+        storyModeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StoryModeManager manager = new StoryModeManager(scoreBoardService);
+                manager.startStoryMode();
             }
         });
         returnButton.addActionListener(new ActionListener() {

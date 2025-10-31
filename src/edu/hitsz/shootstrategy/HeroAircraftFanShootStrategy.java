@@ -24,7 +24,7 @@ public class HeroAircraftFanShootStrategy implements ShootStrategy {
     public List<BaseBullet> shoot(int aircraftLocationX, int aircraftLocationY, int aircraftSpeedX, int aircraftSpeedY,
                                   int direction, int shootNum, int power) {
         List<BaseBullet> res = new LinkedList<>();
-        int baseSpeed = 20;
+        int baseSpeed = 25;
         int radius1 = 30;
         int radius2 = 60;
 

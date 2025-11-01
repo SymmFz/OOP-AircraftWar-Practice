@@ -6,9 +6,13 @@ scale 4
 !pragma sveglimit 65536
 
 class HeroAircraft {
+    - shootingStateTimer:ScheduledFuture<?>
     - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + {static} getInstance():HeroAircraft
+    + {static} resetInstance():void
     + forward():void
+    + upgradeShootingStrategyForPeriod(ShootStrategy newStrategy, int duration, \n\
+                                        TimeUnit unit, ScheduledExecutorService executorService):void
 }
 
 class HeroAircraftHolder {

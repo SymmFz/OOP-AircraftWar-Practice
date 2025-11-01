@@ -3,7 +3,7 @@
 
 scale 2
 
-!pragma sveglimit 131072
+!pragma sveglimit 262144
 
 abstract class AbstractFlyingObject
 {

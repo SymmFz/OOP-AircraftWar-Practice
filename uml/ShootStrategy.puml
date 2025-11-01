@@ -1,9 +1,9 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-scale 4
+scale 6
 
-!pragma sveglimit 65536
+!pragma sveglimit 131072
 
 abstract class AbstractAircraft
 {

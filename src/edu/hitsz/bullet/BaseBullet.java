@@ -42,8 +42,7 @@ public abstract class BaseBullet extends AbstractFlyingObject implements BombObs
         return power;
     }
 
-    @Override
     public void updateOnBombExplosion() {
-        this.vanish();
+        return;
     }
 }

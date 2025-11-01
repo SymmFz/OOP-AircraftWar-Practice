@@ -163,6 +163,7 @@ class HeroBullet {
 
 class EnemyBullet {
     + EnemyBullet(int locationX, int locationY, int speedX, int speedY, int power)
+    + updateOnBombExplosion():void
 }
 
 BaseBullet <|-- HeroBullet

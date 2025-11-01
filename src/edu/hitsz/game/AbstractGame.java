@@ -9,6 +9,7 @@ import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.item.BaseItem;
 import edu.hitsz.item.BombItem;
+import edu.hitsz.item.BombObserver;
 import edu.hitsz.scorerecord.ScoreBoardService;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
@@ -25,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author hitsz
  */
-public abstract class AbstractGame extends JPanel {
+public abstract class AbstractGame extends JPanel implements BombObserver  {
 
     private int backGroundTop = 0;
 
@@ -494,7 +495,13 @@ public abstract class AbstractGame extends JPanel {
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
                         // 获得分数，产生道具补给
-                        items.addAll(enemyAircraft.dropItems());
+                        List<BaseItem> dropItems = enemyAircraft.dropItems();
+                        for (BaseItem item : dropItems) {
+                            if (item instanceof  BombItem) {
+                                ((BombItem) item).registerObserver(this);
+                            }
+                        }
+                        items.addAll(dropItems);
                         score += enemyAircraft.getScoreNum();
                         if (enemyAircraft instanceof BossEnemy) {
                             bossExists = false;
@@ -621,6 +628,11 @@ public abstract class AbstractGame extends JPanel {
         g.drawString("SCORE:" + this.score, x, y);
         y = y + 20;
         g.drawString("LIFE:" + this.heroAircraft.getHp(), x, y);
+    }
+
+    @Override
+    public void updateOnBombExplosion() {
+        score += enemyAircrafts.stream().mapToInt(EnemyAircraft::getScoreNum).sum();
     }
 
 }

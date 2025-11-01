@@ -46,20 +46,20 @@ public class HardGame extends AbstractGame {
 
     @Override
     protected int calculateEnemyMaxNumber(int baseMaxNumber, int score) {
-        // 每获得8000分，最大敌机数+1，上限为20
-        return Math.min(20, baseMaxNumber + score / 8000);
+        // 每获得12000分，最大敌机数+1，上限为20
+        return Math.min(15, baseMaxNumber + score / 12000);
     }
 
     @Override
     protected int calculateEliteEnemyWeight(int baseWeight, int time) {
-        // 每10秒，精英机权重+1，上限为8
-        return Math.min(8, baseWeight + time / 10000);
+        // 每20秒，精英机权重+1，上限为8
+        return Math.min(8, baseWeight + time / 20000);
     }
 
     @Override
     protected int calculateElitePlusEnemyWeight(int baseWeight, int time) {
-        // 每20秒，超级精英机权重+1，上限为6
-        return Math.min(6, baseWeight + time / 20000);
+        // 每30秒，超级精英机权重+1，上限为6
+        return Math.min(6, baseWeight + time / 30000);
     }
 
     @Override

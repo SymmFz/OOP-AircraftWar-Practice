@@ -46,19 +46,19 @@ public class NormalGame extends AbstractGame {
 
     @Override
     protected int calculateEnemyMaxNumber(int baseMaxNumber, int score) {
-        // 每获得10000分，最大敌机数+1，上限为15
-        return Math.min(15, baseMaxNumber + score / 10000);
+        // 每获得16000分，最大敌机数+1，上限为15
+        return Math.min(10, baseMaxNumber + score / 16000);
     }
 
     @Override
     protected int calculateEliteEnemyWeight(int baseWeight, int time) {
-        // 每15秒，精英机权重+1，上限为6
-        return Math.min(6, baseWeight + time / 15000);
+        // 每30秒，精英机权重+1，上限为6
+        return Math.min(6, baseWeight + time / 30000);
     }
 
     @Override
     protected int calculateElitePlusEnemyWeight(int baseWeight, int time) {
-        // 每30秒，超级精英机权重+1，上限为4
-        return Math.min(4, baseWeight + time / 30000);
+        // 每60秒，超级精英机权重+1，上限为4
+        return Math.min(4, baseWeight + time / 60000);
     }
 }

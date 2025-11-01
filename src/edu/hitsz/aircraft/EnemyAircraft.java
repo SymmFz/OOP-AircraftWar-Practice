@@ -24,11 +24,11 @@ public abstract class EnemyAircraft extends AbstractAircraft implements BombObse
     }
 
     // 掉落各类道具的概率
-    private static final int HEALING_ITEM_WEIGHT = 60;
+    private static final int HEALING_ITEM_WEIGHT = 70;
     private static final int FIRE_POWER_UP_WEIGHT = 50;
-    private static final int BOMB_ITEM_WEIGHT = 20;
+    private static final int BOMB_ITEM_WEIGHT = 40;
     private static final int FIRE_POWER_UP_PLUS_WEIGHT = 30;
-    private static final int DARTS_ITEM_WEIGHT = 30;
+    private static final int DARTS_ITEM_WEIGHT = 20;
 
     private static final int TOTAL_WEIGHT = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + BOMB_ITEM_WEIGHT
             + FIRE_POWER_UP_PLUS_WEIGHT + DARTS_ITEM_WEIGHT;

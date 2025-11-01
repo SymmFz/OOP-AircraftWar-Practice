@@ -1,0 +1,95 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+scale 4
+
+!pragma sveglimit 65536
+
+interface BombObserver
+{
+    + {abstract} updateOnBombExplosion(): void
+}
+
+class BombItem
+{
+    - bombExplosionObserver: List<BombObserver>
+    + BombItem(int locationX, int locationY, int speedX, int speedY)
+    + registerObserver(BombObserver observer): void
+    + registerObserver(List<? extends BombObserver> observers): void
+    + removeObserver(BombObserver observer): void
+    + removeObserver(List<? extends BombObserver> observers): void
+    - notifyObserver(): void
+    + active(HeroAircraft heroAircraft, ScheduledExecutorService executorService): void
+}
+
+BombItem o-right-> BombObserver
+
+abstract class AbstractGame implements BombObserver
+{
+    - enemyAircrafts: List<EnemyAircraft>
+    - enemyBullets: List<BaseBullet>
+    + updateOnBombExplosion(): void
+}
+
+abstract class EnemyAircraft implements BombObserver
+{
+    # itemDropChance: double
+    # maxItemNum: int
+    + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                    int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                    double itemDropChance, int maxItemNum)
+    + dropItems(): List<BaseItem>
+    + {abstract} getScoreNum(): int
+    + {abstract} updateOnBombExplosion(): void
+}
+
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+               int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+               double itemDropChance, int maxItemNum)
+    + updateOnBombExplosion(): void
+}
+
+class EliteEnemy {
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                 int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                 double itemDropChance, int maxItemNum)
+    + updateOnBombExplosion(): void
+}
+
+class BossEnemy {
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                double itemDropChance, int maxItemNum)
+    + updateOnBombExplosion(): void
+}
+
+class ElitePlusEnemy {
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                     int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                     double itemDropChance, int maxItemNum)
+    + updateOnBombExplosion(): void
+}
+
+EnemyAircraft <|-- MobEnemy
+EnemyAircraft <|-- EliteEnemy
+EnemyAircraft <|-- BossEnemy
+EnemyAircraft <|-- ElitePlusEnemy
+
+abstract class BaseBullet implements BombObserver
+{
+    - power: int
+    + BaseBullet(int locationX, int locationY, int speedX, int speedY, int power)
+    + forward(): void
+    + getPower(): int
+    + updateOnBombExplosion(): void
+}
+
+class EnemyBullet {
+    + EnemyBullet(int locationX, int locationY, int speedX, int speedY, int power)
+    + updateOnBombExplosion(): void
+}
+
+BaseBullet <|-- EnemyBullet
+
+@enduml

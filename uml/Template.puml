@@ -1,27 +1,87 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
+scale 4
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
+!pragma sveglimit 65536
 
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+abstract class AbstractGame
+{
+    # gameDifficulty: GameDifficulty
+    # scoreBoardService: ScoreBoardService
+    # baseEnemyMaxNumber: int
+    # baseMobEnemyWeight: int
+    # baseEliteEnemyWeight: int
+    # baseElitePlusEnemyWeight: int
+    # baseBossScoreInterval: int
+    # bossKilledNum: int
+    # score: int
+    # time: int
+    
+    + AbstractGame(ScoreBoardService scoreBoardService)
+    + action(): void
+    - generateEnemyAircraftAction(): void
+    - shootAction(): void
+    - itemsMoveAction(): void
+    - bulletsMoveAction(): void
+    - aircraftsMoveAction(): void
+    - crashCheckAction(): void
+    - postProcessAction(): void
+    - updateGameProperty(): void
+    
+    + {abstract} configureGame(): void
+    # {abstract} calculateEnemyHpRate(int time): double
+    # {abstract} calculateEnemyPowerRate(int time): double
+    # {abstract} calculateBossHpRate(int bossKilledNum): double
+    # {abstract} calculateBossPowerRate(int bossKilledNum): double
+    # {abstract} calculateEnemyMaxNumber(int baseMaxNumber, int score): int
+    # {abstract} calculateEliteEnemyWeight(int baseWeight, int time): int
+    # {abstract} calculateElitePlusEnemyWeight(int baseWeight, int time): int
+    # calculateBossScoreInterval(int baseInterval, int bossKilledNum): int
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+class EasyGame
+{
+    + EasyGame(ScoreBoardService scoreBoardService)
+    + configureGame(): void
+    # calculateEnemyHpRate(int time): double
+    # calculateEnemyPowerRate(int time): double
+    # calculateBossHpRate(int bossKilledNum): double
+    # calculateBossPowerRate(int bossKilledNum): double
+    # calculateEnemyMaxNumber(int baseMaxNumber, int score): int
+    # calculateEliteEnemyWeight(int baseWeight, int time): int
+    # calculateElitePlusEnemyWeight(int baseWeight, int time): int
 }
+
+class NormalGame
+{
+    + NormalGame(ScoreBoardService scoreBoardService)
+    + configureGame(): void
+    # calculateEnemyHpRate(int time): double
+    # calculateEnemyPowerRate(int time): double
+    # calculateBossHpRate(int bossKilledNum): double
+    # calculateBossPowerRate(int bossKilledNum): double
+    # calculateEnemyMaxNumber(int baseMaxNumber, int score): int
+    # calculateEliteEnemyWeight(int baseWeight, int time): int
+    # calculateElitePlusEnemyWeight(int baseWeight, int time): int
+}
+
+class HardGame
+{
+    + HardGame(ScoreBoardService scoreBoardService)
+    + configureGame(): void
+    # calculateEnemyHpRate(int time): double
+    # calculateEnemyPowerRate(int time): double
+    # calculateBossHpRate(int bossKilledNum): double
+    # calculateBossPowerRate(int bossKilledNum): double
+    # calculateEnemyMaxNumber(int baseMaxNumber, int score): int
+    # calculateEliteEnemyWeight(int baseWeight, int time): int
+    # calculateElitePlusEnemyWeight(int baseWeight, int time): int
+    # calculateBossScoreInterval(int baseInterval, int bossKilledNum): int
+}
+
+AbstractGame <|-- EasyGame
+AbstractGame <|-- NormalGame
+AbstractGame <|-- HardGame
 
 @enduml

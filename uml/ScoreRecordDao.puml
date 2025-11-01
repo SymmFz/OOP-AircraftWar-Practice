@@ -5,61 +5,120 @@ scale 4
 
 !pragma sveglimit 65536
 
-class Game
+abstract class AbstractGame
 {
-
+    # scoreBoardService:ScoreBoardService
 }
 
-Game .right.> ScoreRecordDao
+class EasyGame {
+    + EasyGame(ScoreBoardService scoreBoardService)
+}
+
+class NormalGame {
+    + NormalGame(ScoreBoardService scoreBoardService)
+}
+
+class HardGame {
+    + HardGame(ScoreBoardService scoreBoardService)
+}
+
+AbstractGame <|-- EasyGame
+AbstractGame <|-- NormalGame
+AbstractGame <|-- HardGame
+
+AbstractGame .right.> ScoreBoardService
+
+class ScoreBoardService
+{
+    - {static} TIME_FORMATTER: DateTimeFormatter
+    - dao: ScoreRecordDao
+    - observers: List<ScoreRecordObserver>
+    + ScoreBoardService(ScoreRecordDao dao)
+    + addObserver(ScoreRecordObserver observer): void
+    + removeObserver(ScoreRecordObserver observer): void
+    - notifyObservers(GameDifficulty difficulty): void
+    + addRecord(String player, int score, GameDifficulty difficulty): void
+    + deleteRecordByIndex(int index, GameDifficulty difficulty): void
+    + getScoreBoardColumnName(): String[]
+    + getScoreBoardTableData(GameDifficulty difficulty): String[][]
+    + printSingleScoreRecordByIndex(int index, GameDifficulty difficulty): void
+    + printAllScoreRecord(GameDifficulty difficulty): void
+    + printScoreBoardInConsole(GameDifficulty difficulty): void
+}
+
+ScoreBoardService .right.> ScoreRecordDao
+ScoreBoardService o-down-> ScoreRecordObserver
+
+interface ScoreRecordObserver
+{
+    + {abstract} onScoreRecordChanged(GameDifficulty difficulty): void
+}
+
+class ScoreBoardTableModel implements ScoreRecordObserver
+{
+    - scoreBoardService: ScoreBoardService
+    - gameDifficulty: GameDifficulty
+    - onDifficultyChangeCallback: Consumer<GameDifficulty>
+    + ScoreBoardTableModel(ScoreBoardService scoreBoardService, GameDifficulty initialDifficulty)
+    + setOnDifficultyChangeCallback(Consumer<GameDifficulty> callback): void
+    + refreshData(GameDifficulty difficulty): void
+    + getGameDifficulty(): GameDifficulty
+    + onScoreRecordChanged(GameDifficulty difficulty): void
+    + isCellEditable(int row, int column): boolean
+}
+
+ScoreBoardTableModel .up.> ScoreBoardService
+
+enum GameDifficulty
+{
+    EASY
+    NORMAL
+    HARD
+}
 
 interface ScoreRecordDao
 {
-    + getAllScoreRecords(): List<ScoreRecord>
-    + getSingleScoreRecordByNo(int recordNo): ScoreRecord
-    + printSingleScoreRecordByNo(int recordNo): void
-    + printAllScoreRecord(): void
-    + addRecord(ScoreRecord scoreRecord): void
-    + deleteRecordByNo(int recordNo): void
+    + {abstract} getAllScoreRecords(GameDifficulty difficulty): List<ScoreRecord>
+    + {abstract} getSingleScoreRecordByIndex(int index, GameDifficulty difficulty): ScoreRecord
+    + {abstract} addRecord(ScoreRecord scoreRecord): void
+    + {abstract} deleteRecordByIndex(int index, GameDifficulty difficulty): void
 }
 
 class ScoreRecordDaoImpl
 {
-    - {field} scoreRecords: List<ScoreRecord>
-    - {field} {static} DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") {readOnly}
-    - {field} {static} FILE_PATH: String = "scores.json" {readOnly}
-    - {field} {static} GSON: Gson {readOnly}
+    - {static} FILE_PATH: String = "scores.json" {readOnly}
+    - {static} GSON: Gson {readOnly}
+    - scoreRecordsByDifficulty: Map<GameDifficulty, List<ScoreRecord>> {readOnly}
+    - {static} instance: ScoreRecordDaoImpl {readOnly}
     - ScoreRecordDaoImpl()
-    - {static} recordToString(ScoreRecord record)
+    + {static} getInstance(): ScoreRecordDaoImpl
     - saveToFile(): void
-    - loadFromFile(): List<ScoreRecord>
-    - reRank(): void
-    - sortAndReRank(): void
-    + getAllScoreRecords(): List<ScoreRecord>
-    + getSingleScoreRecordByNo(int recordNo): ScoreRecord
-    + printSingleScoreRecordByNo(int recordNo): void
-    + printAllScoreRecord(): void
+    - loadFromFile(): Map<GameDifficulty, List<ScoreRecord>>
+    + getAllScoreRecords(GameDifficulty difficulty): List<ScoreRecord>
+    + getSingleScoreRecordByIndex(int index, GameDifficulty difficulty): ScoreRecord
     + addRecord(ScoreRecord record): void
-    + deleteRecordByNo(int recordNo): void
+    + deleteRecordByIndex(int index, GameDifficulty difficulty): void
 }
 
 ScoreRecordDao <|..  ScoreRecordDaoImpl
 
 class ScoreRecord
 {
-    - recordNo: int
     - playerName: String
     - scores: int
     - recordTime: LocalDateTime
+    - gameDifficulty: GameDifficulty
     + ScoreRecord()
-    + ScoreRecord(String playerName, int scores)
+    + ScoreRecord(String playerName, int scores, LocalDateTime recordTime, GameDifficulty gameDifficulty)
     + getScores(): int
     + setScores(int scores): void
     + getPlayerName(): String
     + setPlayerName(String playerName): void
-    + getRecordNo(): int
-    + setRecordNo(int recordNo): void
     + getRecordTime(): LocalDateTime
     + setRecordTime(LocalDateTime recordTime): void
+    + getGameDifficulty(): GameDifficulty
+    + setGameDifficulty(GameDifficulty gameDifficulty): void
+    + toString(): String
 }
 
 ScoreRecordDaoImpl -left-> ScoreRecord

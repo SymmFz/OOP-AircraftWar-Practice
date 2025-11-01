@@ -5,13 +5,18 @@ scale 4
 
 !pragma sveglimit 65536
 
-class Game
+abstract class AbstractGame
 {
-
+    # mobEnemyFactory:EnemyAircraftFactory
+    # eliteEnemyFactory:EnemyAircraftFactory
+    # elitePlusEnemyFactory:EnemyAircraftFactory
+    # bossEnemyFactory:EnemyAircraftFactory
+    - heroAircraft:HeroAircraft
+    - enemyAircrafts:List<EnemyAircraft>
 }
 
-Game ..> EnemyAircraft
-Game ..> EnemyAircraftFactory
+AbstractGame ..> EnemyAircraft
+AbstractGame ..> EnemyAircraftFactory
 
 
 interface EnemyAircraftFactory
@@ -49,89 +54,60 @@ EliteEnemyFactory ..> EliteEnemy
 BossEnemyFactory ..> BossEnemy
 ElitePlusEnemyFactory ..> ElitePlusEnemy
 
-abstract class AbstractFlyingObject
-{
-    # locationX:int
-    # locationY:int
-    # speedX:int
-    # speedY:int
-    # image:BufferedImage
-    # width:int
-    # height:int
-    # isValid:boolean
-
-    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
-    + forward():void
-    + crash(AbstractFlyingObject flyingObject):boolean
-    + getLocationX():int
-    + getLocationY():int
-    + setLocation(double locationX, double locationY):void
-    + getSpeedX():int
-    + getSpeedY():int
-    + getImage():BufferedImage
-    + getWidth():int
-    + getHeight():int
-    + notValid():boolean
-    + vanish():void
-}
-
-
-abstract class AbstractAircraft
-{
-	# maxHp:int
-    # hp:int
-    # direction:int
-    # shootNum:int
-    # power:int
-    # shootStrategy:ShootStrategy
-    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
-                       int direction, int shootNum, int power, ShootStrategy shootStrategy)
-    + decreaseHp(int decrease):void
-    + increaseHp(int increase):void
-    + getHp():int
-    + setStrategy(ShootStrategy strategy):void
-    + shoot():List<BaseBullet>
- }
-
-AbstractFlyingObject <|-- AbstractAircraft
-
-abstract class EnemyAircraft {
+abstract class EnemyAircraft implements BombObserver {
     # itemDropChance:double
     # maxItemNum:int
-    - {static} HEALING_ITEM_WEIGHT: int = 300 {readOnly}
-    - {static} FIRE_POWER_UP_WEIGHT: int = 150 {readOnly}
-    - {static} BOMB_ITEM_WEIGHT: int = 50 {readOnly}
-    - {static} FIRE_POWER_UP_PLUS_WEIGHT: int = 100 {readOnly}
+    - {static} HEALING_ITEM_WEIGHT: int = 70 {readOnly}
+    - {static} FIRE_POWER_UP_WEIGHT: int = 50 {readOnly}
+    - {static} BOMB_ITEM_WEIGHT: int = 40 {readOnly}
+    - {static} FIRE_POWER_UP_PLUS_WEIGHT: int = 30 {readOnly}
+    - {static} DARTS_ITEM_WEIGHT: int = 20 {readOnly}
     - {static} TOTAL_WEIGHT: int = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + \n\
-                             BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT {readOnly}
+                             BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT + DARTS_ITEM_WEIGHT {readOnly}
     - {field} {static} RANDOM_INSTANCE: Random = new Random() {readOnly}
     + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
                     int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
                     double itemDropChance, int maxItemNum)
     + dropItems():List<BaseItem>
+    + {abstract} getScoreNum():int
+    + {abstract} updateOnBombExplosion():void
 }
 
-AbstractAircraft <|-- EnemyAircraft
-
 class MobEnemy {
-    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+               int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+               double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 class EliteEnemy {
-    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                 int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                 double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 
 class BossEnemy {
-    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 class ElitePlusEnemy {
-    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                     int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                     double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 EnemyAircraft <|-- MobEnemy

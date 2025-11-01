@@ -65,7 +65,6 @@ public class StartMenuView {
                     hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                     hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                     hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    hints.put(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
                     g2d.setRenderingHints(hints);
 
                     int panelW = getWidth();
@@ -73,20 +72,16 @@ public class StartMenuView {
                     int imgW = ImageManager.BACKGROUND_GIF.getIconWidth();
                     int imgH = ImageManager.BACKGROUND_GIF.getIconHeight();
 
-                    double panelRatio = (double) panelW / panelH;
-                    double imgRatio = (double) imgW / imgH;
+                    // 0.8 for 640x960 to 512x768
+                    double scale = 0.77;
+                    int offsetX = 0;
+                    int offsetY = 24;
 
-                    int newW, newH;
-                    if (panelRatio > imgRatio) {
-                        newW = panelW;
-                        newH = (int) (imgH * ((double) panelW / imgW));
-                    }
-                    else {
-                        newH = panelH;
-                        newW = (int) (imgW * ((double) panelH / imgH));
-                    }
-                    int x = (panelW - newW) / 2;
-                    int y = (panelH - newH) / 2;
+                    int newW = (int) (imgW * scale);
+                    int newH = (int) (imgH * scale);
+
+                    int x = (panelW - newW) / 2 + offsetX;
+                    int y = (panelH - newH) / 2 + offsetY;
 
                     g2d.drawImage(ImageManager.BACKGROUND_GIF.getImage(), x, y, newW, newH, this);
                     g2d.dispose();

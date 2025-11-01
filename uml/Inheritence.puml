@@ -50,9 +50,13 @@ abstract class AbstractAircraft
 
 
 class HeroAircraft {
+    - shootingStateTimer:ScheduledFuture<?>
     - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + {static} getInstance():HeroAircraft
+    + {static} resetInstance():void
     + forward():void
+    + upgradeShootingStrategyForPeriod(ShootStrategy newStrategy, int duration, \n\
+                                        TimeUnit unit, ScheduledExecutorService executorService):void
 }
 
 class HeroAircraftHolder {
@@ -65,43 +69,62 @@ HeroAircraftHolder .[norank].> HeroAircraft : holds instance
 
 AbstractAircraft <|-- HeroAircraft
 
-abstract class EnemyAircraft {
+abstract class EnemyAircraft implements BombObserver {
     # itemDropChance:double
     # maxItemNum:int
-    - {static} HEALING_ITEM_WEIGHT: int = 300 {readOnly}
-    - {static} FIRE_POWER_UP_WEIGHT: int = 150 {readOnly}
-    - {static} BOMB_ITEM_WEIGHT: int = 50 {readOnly}
-    - {static} FIRE_POWER_UP_PLUS_WEIGHT: int = 100 {readOnly}
+    - {static} HEALING_ITEM_WEIGHT: int = 70 {readOnly}
+    - {static} FIRE_POWER_UP_WEIGHT: int = 50 {readOnly}
+    - {static} BOMB_ITEM_WEIGHT: int = 40 {readOnly}
+    - {static} FIRE_POWER_UP_PLUS_WEIGHT: int = 30 {readOnly}
+    - {static} DARTS_ITEM_WEIGHT: int = 20 {readOnly}
     - {static} TOTAL_WEIGHT: int = HEALING_ITEM_WEIGHT + FIRE_POWER_UP_WEIGHT + \n\
-                             BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT {readOnly}
+                             BOMB_ITEM_WEIGHT + FIRE_POWER_UP_PLUS_WEIGHT + DARTS_ITEM_WEIGHT {readOnly}
     - {field} {static} RANDOM_INSTANCE: Random = new Random() {readOnly}
     + EnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, \n\
                     int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
                     double itemDropChance, int maxItemNum)
     + dropItems():List<BaseItem>
+    + {abstract} getScoreNum():int
+    + {abstract} updateOnBombExplosion():void
 }
 
 AbstractAircraft <|-- EnemyAircraft
 
 class MobEnemy {
-    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+               int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+               double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 class EliteEnemy {
-    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                 int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                 double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 
 class BossEnemy {
-    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 class ElitePlusEnemy {
-    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, \n\
+                     int direction, int shootNum, int power, ShootStrategy shootStrategy, \n\
+                     double itemDropChance, int maxItemNum)
     + forward():void
+    + getScoreNum():int
+    + updateOnBombExplosion():void
 }
 
 EnemyAircraft <|-- MobEnemy
@@ -109,12 +132,29 @@ EnemyAircraft <|-- EliteEnemy
 EnemyAircraft <|-- BossEnemy
 EnemyAircraft <|-- ElitePlusEnemy
 
-abstract class BaseBullet
+abstract class BaseBullet implements BombObserver
 {
-    - power:int = 10
+    - power:int
     + BaseBullet(int locationX, int locationY, int speedX, int speedY, int power)
     + forward():void
 	+ getPower():int
+    + updateOnBombExplosion():void
+}
+
+interface BombObserver {
+    + updateOnBombExplosion():void
+}
+
+class GoldBullet {
+    + GoldBullet(int locationX, int locationY, int speedX, int speedY, int power)
+}
+
+class HeroDartsBullet {
+    + HeroDartsBullet(int locationX, int locationY, int speedX, int speedY, int power)
+}
+
+class HeroGreenBullet {
+    + HeroGreenBullet(int locationX, int locationY, int speedX, int speedY, int power)
 }
 
 class HeroBullet {
@@ -127,38 +167,56 @@ class EnemyBullet {
 
 BaseBullet <|-- HeroBullet
 BaseBullet <|-- EnemyBullet
+BaseBullet <|-- GoldBullet
+BaseBullet <|-- HeroDartsBullet
+BaseBullet <|-- HeroGreenBullet
 
 abstract class BaseItem {
     + BaseItem(int locationX, int locationY, int speedX, int speedY)
     + forward():void
-    + {abstract} active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
+    + {abstract} active(HeroAircraft heroAircraft, ScheduledExecutorService executorService):void
 }
 
 class HealingItem {
     - {static} HEALING_AMOUNT: int = 30 {readOnly}
     + HealingItem(int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
+    + active(HeroAircraft heroAircraft, ScheduledExecutorService executorService):void
 }
 
 class FirePowerUpItem {
+    - {static} DURATION_SECONDS: int = 8 {readOnly}
     + FirePowerUpItem(int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
+    + active(HeroAircraft heroAircraft, ScheduledExecutorService executorService):void
 }
 
 class BombItem {
+    - bombExplosionObserver:List<BombObserver>
     + BombItem(int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
+    + registerObserver(BombObserver observer):void
+    + registerObserver(List<? extends BombObserver> observers):void
+    + removeObserver(BombObserver observer):void
+    + removeObserver(List<? extends BombObserver> observers):void
+    - notifyObserver():void
+    + active(HeroAircraft heroAircraft, ScheduledExecutorService executorService):void
 }
 
 class FirePowerUpPlusItem {
-    + FirePowerPlusUpItem (int locationX, int locationY, int speedX, int speedY)
-    + active(HeroAircraft heroAircraft, List<EnemyAircraft> enemyAircrafts, List<BaseBullet> enemyBullets):void
+    - {static} DURATION_SECONDS: int = 10 {readOnly}
+    + FirePowerUpPlusItem (int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft, ScheduledExecutorService executorService):void
+}
+
+class DartsItem {
+    - {static} DURATION_SECONDS: int = 16 {readOnly}
+    + DartsItem(int locationX, int locationY, int speedX, int speedY)
+    + active(HeroAircraft heroAircraft, ScheduledExecutorService executorService):void
 }
 
 BaseItem <|-- HealingItem
 BaseItem <|-- FirePowerUpItem
 BaseItem <|-- BombItem
 BaseItem <|-- FirePowerUpPlusItem
+BaseItem <|-- DartsItem
 
 AbstractFlyingObject <|-- AbstractAircraft
 AbstractFlyingObject <|-- BaseBullet
